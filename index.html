@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>STUNTDATE — You're the gig.</title>
+<meta name="description" content="Humans only. AI don't apply. IRL & FaceTime gigs for bed rotters. Get on the beta list.">
+<meta property="og:title" content="STUNTDATE — You're the gig.">
+<meta property="og:description" content="Humans only. AI don't apply. Get on the beta list.">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+<style>
+  /* ---------- tokens ---------- */
+  :root{
+    --black:#000;
+    --white:#fff;
+    --red:#ff1f2d;
+    --grey:#8a8a8a;
+    --dim:#5a5a5a;
+    --field-border:#d9d9d9;
+    --display:'Anton', Impact, 'Haettenschweiler', 'Arial Narrow Bold', sans-serif;
+    --mono:'Courier New', Courier, monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--black)!important;color:var(--white);min-height:100%}
+  body{
+    font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;
+    -webkit-text-size-adjust:100%;
+    display:flex;justify-content:center;
+    min-height:100vh;min-height:100dvh;
+    padding:56px 16px 40px;
+  }
+  main{width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;text-align:center}
+
+  /* ---------- logo + scribble ---------- */
+  .logo{position:relative;width:100%;max-width:400px;aspect-ratio:400/130;display:flex;align-items:center;justify-content:center}
+  .logo h1{
+    font-family:var(--display);font-weight:400;
+    font-size:clamp(44px,15vw,64px);line-height:1;letter-spacing:-.5px;
+    color:var(--white);position:relative;z-index:1;
+    transform:scaleY(1.08);
+  }
+  .logo svg{position:absolute;inset:-6% -4%;width:108%;height:112%;overflow:visible;pointer-events:none}
+  .logo path{
+    fill:none;stroke:var(--red);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:1400;stroke-dashoffset:1400;
+    animation:draw 1.3s cubic-bezier(.6,.05,.3,1) .25s forwards;
+  }
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @media (prefers-reduced-motion:reduce){.logo path{animation:none;stroke-dashoffset:0}}
+
+  /* ---------- copy ---------- */
+  .tag{font-family:var(--display);font-weight:400;font-size:34px;line-height:1.1;margin-top:34px;letter-spacing:-.3px}
+  .sub{font-size:19px;margin-top:14px;letter-spacing:.3px}
+  .fine{color:var(--grey);font-size:18px;line-height:1.6;margin-top:18px;letter-spacing:.3px}
+
+  /* ---------- form ---------- */
+  form{width:100%;margin-top:40px;display:flex;flex-direction:column;gap:22px}
+  input[type=email],input[type=text]{
+    width:100%;height:58px;padding:0 20px;
+    background:var(--white)!important;color:#111!important;
+    border:1px solid var(--field-border);border-radius:6px;
+    font-family:var(--mono);font-size:19px;letter-spacing:.3px;
+    -webkit-appearance:none;appearance:none;outline:none;
+  }
+  input::placeholder{color:#8a8a8a;opacity:1}
+  input:focus{border-color:var(--red);box-shadow:0 0 0 2px var(--red)}
+
+  .roles{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .role{
+    min-height:92px;padding:12px;
+    font-family:var(--mono);font-size:18px;line-height:1.35;letter-spacing:.3px;
+    background:var(--black);color:var(--white);border:3px solid var(--white);border-radius:0;
+    cursor:pointer;-webkit-appearance:none;appearance:none;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .12s,color .12s;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .role[aria-pressed="true"]{background:var(--white);color:var(--black)}
+  .role:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+
+  .add{
+    height:96px;width:100%;
+    background:var(--red)!important;color:var(--white)!important;border:0;border-radius:0;
+    font-family:var(--display);font-size:36px;letter-spacing:.2px;
+    cursor:pointer;-webkit-appearance:none;appearance:none;
+    transition:transform .08s,filter .12s;
+  }
+  .add:hover{filter:brightness(1.08)}
+  .add:active{transform:scale(.985)}
+  .add:disabled{filter:grayscale(.4) brightness(.8);cursor:wait}
+
+  .msg{min-height:24px;font-size:16px;line-height:1.5;color:var(--grey)}
+  .msg.err{color:var(--red)}
+
+  /* honeypot */
+  .hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;overflow:hidden}
+
+  /* ---------- success ---------- */
+  .done{display:none;margin-top:44px;flex-direction:column;align-items:center;gap:16px}
+  .done.show{display:flex}
+  .done h2{font-family:var(--display);font-weight:400;font-size:44px;line-height:1.05}
+  .done p{font-size:18px;line-height:1.6;color:var(--grey)}
+
+  footer{margin-top:46px;color:var(--dim);font-size:16px;letter-spacing:.5px}
+
+  @media (max-width:380px){
+    .sub{font-size:16px}.fine{font-size:16px}
+    .role{font-size:16px;min-height:84px}
+    .add{height:84px;font-size:32px}
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="logo">
+    <svg viewBox="0 0 400 130" aria-hidden="true">
+      <!-- hand-drawn red loop: starts with the tail at top, sweeps around, overshoots -->
+      <path d="M86 26 C150 6, 260 2, 330 14 C390 26, 412 58, 392 86 C366 118, 270 128, 180 126 C90 124, 18 108, 8 74 C0 44, 50 18, 130 8 C190 1, 245 2, 276 6"/>
+    </svg>
+    <h1>STUNTDATE</h1>
+  </div>
+
+  <p class="tag">You're the gig.</p>
+  <p class="sub">IRL &amp; FaceTime for bed rotters</p>
+  <p class="fine">Humans only. AI don't apply.<br>Get on the beta list.</p>
+
+  <form id="signup" novalidate>
+    <input type="email" id="email" name="email" placeholder="your email" autocomplete="email" inputmode="email" required aria-label="your email">
+    <input type="text" id="city" name="city" placeholder="your city (optional)" autocomplete="address-level2" aria-label="your city (optional)">
+
+    <div class="roles" role="group" aria-label="What do you want to do?">
+      <button type="button" class="role" id="createGigs" aria-pressed="false">I'll create gigs</button>
+      <button type="button" class="role" id="takeGigs" aria-pressed="false">I'll take gigs</button>
+    </div>
+
+    <div class="hp" aria-hidden="true"><label>Leave empty <input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>
+
+    <button type="submit" class="add" id="addBtn">ADD ME</button>
+    <p class="msg" id="msg" role="status" aria-live="polite"></p>
+  </form>
+
+  <section class="done" id="done" aria-live="polite">
+    <h2>You're in.</h2>
+    <p>We'll email you when the beta drops.<br>Humans only. Stay weird.</p>
+  </section>
+
+  <footer>stuntdate.com</footer>
+</main>
+
+<script>
+/* ============================================================
+   SUPABASE CONFIG — paste your two values here.
+   Supabase dashboard → Project Settings → API
+   (the anon / publishable key is safe to put in a web page;
+    row-level security only lets visitors INSERT, never read.)
+   ============================================================ */
+const SUPABASE_URL = 'https://uteudsgyzjbqqupprvbh.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_67qWv22s-hW7gmldtJUCNg_Negs__jA';
+const TABLE        = 'beta_signups';
+
+const $ = id => document.getElementById(id);
+const form = $('signup'), msg = $('msg'), btn = $('addBtn');
+
+// Each choice is its own on/off switch — people can pick one or both.
+document.querySelectorAll('.role').forEach(b =>
+  b.addEventListener('click', () => {
+    b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+    if (msg.classList.contains('err')) say('');
+  })
+);
+
+function say(text, isErr){ msg.textContent = text; msg.classList.toggle('err', !!isErr); }
+
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  if ($('website').value) return;                       // bot caught by honeypot
+
+  const email = $('email').value.trim().toLowerCase();
+  const city  = $('city').value.trim();
+  const create_gigs = $('createGigs').getAttribute('aria-pressed') === 'true';
+  const take_gigs   = $('takeGigs').getAttribute('aria-pressed') === 'true';
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { say('Need a real email.', true); $('email').focus(); return; }
+  if (!create_gigs && !take_gigs) { say('Pick one — or both.', true); return; }
+
+  btn.disabled = true; btn.textContent = 'ADDING…'; say('');
+
+  const headers = { 'Content-Type':'application/json', 'apikey':SUPABASE_KEY, 'Prefer':'return=minimal' };
+  if (SUPABASE_KEY.startsWith('eyJ')) headers.Authorization = 'Bearer ' + SUPABASE_KEY; // legacy anon JWT
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
+      method:'POST', headers,
+      body: JSON.stringify({ email, city: city || null, create_gigs, take_gigs, source: location.hostname || 'local' })
+    });
+    if (res.ok || res.status === 409) {                 // 409 = already on the list
+      form.style.display = 'none';
+      if (res.status === 409) $('done').querySelector('h2').textContent = "You're already in.";
+      $('done').classList.add('show');
+    } else {
+      throw new Error(res.status + ' ' + await res.text());
+    }
+  } catch (err) {
+    console.error(err);
+    say('Something broke. Try again in a sec.', true);
+    btn.disabled = false; btn.textContent = 'ADD ME';
+  }
+});
+</script>
+</body>
+</html>
