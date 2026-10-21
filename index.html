@@ -5,13 +5,59 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>STUNTDATE — You're the gig.</title>
 <meta name="description" content="Humans only. AI don't apply. IRL & FaceTime gigs for bed rotters. Get on the beta list.">
+<link rel="canonical" href="https://stuntdate.com/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+
+<!-- share previews (iMessage, WhatsApp, Instagram DMs, X, LinkedIn) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="STUNTDATE">
+<meta property="og:url" content="https://stuntdate.com/">
 <meta property="og:title" content="STUNTDATE — You're the gig.">
 <meta property="og:description" content="Humans only. AI don't apply. Get on the beta list.">
+<meta property="og:image" content="https://stuntdate.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="STUNTDATE in a red hand-drawn circle. You're the gig. Humans only. AI don't apply.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="STUNTDATE — You're the gig.">
+<meta name="twitter:description" content="Humans only. AI don't apply. Get on the beta list.">
+<meta name="twitter:image" content="https://stuntdate.com/og.png">
+
+<!-- icons -->
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#000000">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+
+<link rel="preload" href="/anton.woff2" as="font" type="font/woff2" crossorigin>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://stuntdate.com/#org",
+      "name": "STUNTDATE",
+      "url": "https://stuntdate.com/",
+      "logo": "https://stuntdate.com/icon-512.png",
+      "slogan": "You're the gig.",
+      "founder": { "@type": "Person", "name": "Julie Daniels Janklow" }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://stuntdate.com/#website",
+      "name": "STUNTDATE",
+      "url": "https://stuntdate.com/",
+      "publisher": { "@id": "https://stuntdate.com/#org" }
+    }
+  ]
+}
+</script>
 <style>
+  @font-face{font-family:'Anton';src:url('/anton.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+  .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   /* ---------- tokens ---------- */
   :root{
     --black:#000;
@@ -89,7 +135,7 @@
   .gig:not(.open) > div{visibility:hidden;transition:visibility 0s .28s}
   .gig-box{border:3px solid var(--white);padding:20px 16px 22px;text-align:left;display:flex;flex-direction:column;gap:14px;position:relative}
   .gig-box::before{content:"";position:absolute;top:-15px;left:calc((100% - 16px)/4 - 12px);border:12px solid transparent;border-top:0;border-bottom-color:var(--white)}
-  .gig-box h3{font-family:var(--display);font-weight:400;font-size:24px;letter-spacing:.2px;line-height:1.1}
+  .gig-box .gig-h{font-family:var(--display);font-weight:400;font-size:24px;letter-spacing:.2px;line-height:1.1}
   .gig-box label{font-size:15px;color:var(--grey);letter-spacing:.3px;display:block;margin-bottom:8px}
   .price{position:relative}
   .price span{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:#111;font-family:var(--mono);font-size:19px;pointer-events:none}
@@ -116,10 +162,12 @@
   /* ---------- success ---------- */
   .done{display:none;margin-top:44px;flex-direction:column;align-items:center;gap:16px}
   .done.show{display:flex}
-  .done h2{font-family:var(--display);font-weight:400;font-size:44px;line-height:1.05}
+  .done .done-h{font-family:var(--display);font-weight:400;font-size:44px;line-height:1.05}
   .done p{font-size:18px;line-height:1.6;color:var(--grey)}
 
   footer{margin-top:46px;color:var(--dim);font-size:16px;letter-spacing:.5px}
+  footer a{color:inherit;text-decoration:none}
+  footer a:hover{color:var(--grey);text-decoration:underline}
 
   @media (max-width:380px){
     .sub{font-size:16px}.fine{font-size:16px}
@@ -138,13 +186,15 @@
     <h1>STUNTDATE</h1>
   </div>
 
-  <p class="tag">You're the gig.</p>
+  <h2 class="tag">You're the gig.</h2>
   <p class="sub">IRL &amp; FaceTime for bed rotters</p>
   <p class="fine">Humans only. AI don't apply.<br>Get on the beta list.</p>
 
   <form id="signup" novalidate>
-    <input type="email" id="email" name="email" placeholder="your email" autocomplete="email" inputmode="email" required aria-label="your email">
-    <input type="text" id="city" name="city" placeholder="your city (optional)" autocomplete="address-level2" aria-label="your city (optional)">
+    <label for="email" class="sr-only">Your email</label>
+    <input type="email" id="email" name="email" placeholder="your email" autocomplete="email" inputmode="email" required>
+    <label for="city" class="sr-only">Your city (optional)</label>
+    <input type="text" id="city" name="city" placeholder="your city (optional)" autocomplete="address-level2">
 
     <div class="roles" role="group" aria-label="What do you want to do?">
       <button type="button" class="role" id="createGigs" aria-pressed="false">I'll create gigs</button>
@@ -154,7 +204,7 @@
     <div class="gig" id="gigPanel" aria-hidden="true">
       <div>
         <div class="gig-box">
-          <h3>What's the gig?</h3>
+          <p class="gig-h">What's the gig?</p>
           <div>
             <label for="gigName">Name the gig you'd create</label>
             <input type="text" id="gigName" maxlength="120" placeholder="e.g. walk my dog to the pier" autocomplete="off" tabindex="-1">
@@ -177,11 +227,11 @@
   </form>
 
   <section class="done" id="done" aria-live="polite">
-    <h2>You're in.</h2>
+    <p class="done-h">You're in.</p>
     <p>We'll email you when the beta drops.<br>Humans only. Stay weird.</p>
   </section>
 
-  <footer>stuntdate.com</footer>
+  <footer><a href="https://stuntdate.com/">stuntdate.com</a></footer>
 </main>
 
 <script>
@@ -196,6 +246,28 @@ const SUPABASE_KEY = 'sb_publishable_67qWv22s-hW7gmldtJUCNg_Negs__jA';
 const TABLE        = 'beta_signups';
 
 const $ = id => document.getElementById(id);
+
+/* ---------- visit counter (no cookies, no IPs, no personal data) ---------- */
+(function countVisit(){
+  try {
+    if (navigator.webdriver || location.hostname !== 'stuntdate.com') return;
+    const u = new URL(location.href);
+    let ref = null;
+    try { if (document.referrer) { const r = new URL(document.referrer).hostname; if (r !== location.hostname) ref = r; } } catch(e){}
+    const h = { 'Content-Type':'application/json', 'apikey':SUPABASE_KEY, 'Prefer':'return=minimal' };
+    fetch(`${SUPABASE_URL}/rest/v1/page_views`, {
+      method:'POST', keepalive:true, headers:h,
+      body: JSON.stringify({
+        path: location.pathname,
+        referrer: ref,
+        utm_source: u.searchParams.get('utm_source'),
+        utm_medium: u.searchParams.get('utm_medium'),
+        utm_campaign: u.searchParams.get('utm_campaign'),
+        device: matchMedia('(max-width: 768px)').matches ? 'mobile' : 'desktop'
+      })
+    }).catch(()=>{});
+  } catch(e){}
+})();
 const form = $('signup'), msg = $('msg'), btn = $('addBtn');
 
 // Each choice is its own on/off switch — people can pick one or both.
@@ -256,7 +328,7 @@ form.addEventListener('submit', async e => {
     });
     if (res.ok || res.status === 409) {                 // 409 = already on the list
       form.style.display = 'none';
-      if (res.status === 409) $('done').querySelector('h2').textContent = "You're already in.";
+      if (res.status === 409) $('done').querySelector('.done-h').textContent = "You're already in.";
       $('done').classList.add('show');
     } else {
       throw new Error(res.status + ' ' + await res.text());
