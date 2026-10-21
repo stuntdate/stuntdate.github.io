@@ -82,6 +82,20 @@
   .role[aria-pressed="true"]{background:var(--white);color:var(--black)}
   .role:focus-visible{outline:3px solid var(--red);outline-offset:3px}
 
+  /* ---------- "I'll create gigs" drop-down ---------- */
+  .gig{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease, margin .28s ease;margin-top:-22px}
+  .gig.open{grid-template-rows:1fr;margin-top:0}
+  .gig > div{overflow:hidden;padding-top:12px;margin-top:-12px}
+  .gig:not(.open) > div{visibility:hidden;transition:visibility 0s .28s}
+  .gig-box{border:3px solid var(--white);padding:20px 16px 22px;text-align:left;display:flex;flex-direction:column;gap:14px;position:relative}
+  .gig-box::before{content:"";position:absolute;top:-15px;left:calc((100% - 16px)/4 - 12px);border:12px solid transparent;border-top:0;border-bottom-color:var(--white)}
+  .gig-box h3{font-family:var(--display);font-weight:400;font-size:24px;letter-spacing:.2px;line-height:1.1}
+  .gig-box label{font-size:15px;color:var(--grey);letter-spacing:.3px;display:block;margin-bottom:8px}
+  .price{position:relative}
+  .price span{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:#111;font-family:var(--mono);font-size:19px;pointer-events:none}
+  .price input{padding-left:40px}
+  @media (prefers-reduced-motion:reduce){.gig{transition:none}}
+
   .add{
     height:96px;width:100%;
     background:var(--red)!important;color:var(--white)!important;border:0;border-radius:0;
@@ -137,6 +151,25 @@
       <button type="button" class="role" id="takeGigs" aria-pressed="false">I'll take gigs</button>
     </div>
 
+    <div class="gig" id="gigPanel" aria-hidden="true">
+      <div>
+        <div class="gig-box">
+          <h3>What's the gig?</h3>
+          <div>
+            <label for="gigName">Name the gig you'd create</label>
+            <input type="text" id="gigName" maxlength="120" placeholder="e.g. walk my dog to the pier" autocomplete="off" tabindex="-1">
+          </div>
+          <div>
+            <label for="gigPrice">What would you pay?</label>
+            <div class="price">
+              <span>$</span>
+              <input type="text" id="gigPrice" inputmode="decimal" maxlength="7" placeholder="40" autocomplete="off" tabindex="-1">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="hp" aria-hidden="true"><label>Leave empty <input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>
 
     <button type="submit" class="add" id="addBtn">ADD ME</button>
@@ -166,12 +199,27 @@ const $ = id => document.getElementById(id);
 const form = $('signup'), msg = $('msg'), btn = $('addBtn');
 
 // Each choice is its own on/off switch — people can pick one or both.
+const gigPanel = $('gigPanel');
+function syncGigPanel(){
+  const on = $('createGigs').getAttribute('aria-pressed') === 'true';
+  gigPanel.classList.toggle('open', on);
+  gigPanel.setAttribute('aria-hidden', on ? 'false' : 'true');
+  ['gigName','gigPrice'].forEach(id => $(id).tabIndex = on ? 0 : -1);
+  if (on) setTimeout(() => $('gigName').focus({preventScroll:false}), 280);
+}
 document.querySelectorAll('.role').forEach(b =>
   b.addEventListener('click', () => {
     b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+    if (b.id === 'createGigs') syncGigPanel();
     if (msg.classList.contains('err')) say('');
   })
 );
+// keep price to digits + one decimal point
+$('gigPrice').addEventListener('input', e => {
+  let v = e.target.value.replace(/[^\d.]/g,'');
+  const i = v.indexOf('.'); if (i > -1) v = v.slice(0,i+1) + v.slice(i+1).replace(/\./g,'').slice(0,2);
+  e.target.value = v;
+});
 
 function say(text, isErr){ msg.textContent = text; msg.classList.toggle('err', !!isErr); }
 
@@ -187,6 +235,15 @@ form.addEventListener('submit', async e => {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { say('Need a real email.', true); $('email').focus(); return; }
   if (!create_gigs && !take_gigs) { say('Pick one — or both.', true); return; }
 
+  let gig_name = null, gig_price = null;
+  if (create_gigs) {
+    gig_name = $('gigName').value.trim();
+    gig_price = parseFloat($('gigPrice').value);
+    if (!gig_name) { say('Name your gig.', true); $('gigName').focus(); return; }
+    if (!(gig_price > 0) || gig_price > 10000) { say('Add what you\'d pay ($1–$10,000).', true); $('gigPrice').focus(); return; }
+    gig_price = Math.round(gig_price * 100) / 100;
+  }
+
   btn.disabled = true; btn.textContent = 'ADDING…'; say('');
 
   const headers = { 'Content-Type':'application/json', 'apikey':SUPABASE_KEY, 'Prefer':'return=minimal' };
@@ -195,7 +252,7 @@ form.addEventListener('submit', async e => {
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
       method:'POST', headers,
-      body: JSON.stringify({ email, city: city || null, create_gigs, take_gigs, source: location.hostname || 'local' })
+      body: JSON.stringify({ email, city: city || null, create_gigs, take_gigs, gig_name, gig_price, source: location.hostname || 'local' })
     });
     if (res.ok || res.status === 409) {                 // 409 = already on the list
       form.style.display = 'none';
