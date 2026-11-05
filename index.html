@@ -171,6 +171,9 @@
   .done p{font-size:18px;line-height:1.6;color:var(--grey)}
 
   footer{margin-top:46px;color:var(--dim);font-size:16px;letter-spacing:.5px}
+  .more{width:100%;margin-top:48px;display:flex;flex-direction:column;gap:12px}
+  .more a{display:block;border:3px solid var(--white);padding:18px 16px;color:var(--white);text-decoration:none;font-family:var(--display);font-size:22px;letter-spacing:.2px;text-align:left}
+  .more a:hover,.more a:focus-visible{background:var(--white);color:var(--black);outline:none}
   /* ---------- how it works + faq ---------- */
   .how,.faq{width:100%;margin-top:64px;text-align:left}
   .sec-h{font-family:var(--display);font-weight:400;font-size:30px;line-height:1.1;margin-bottom:18px;text-align:center}
@@ -291,7 +294,13 @@
     </details>
   </section>
 
-  <footer><a href="https://stuntdate.com/">stuntdate.com</a> · <a href="https://www.instagram.com/stuntdate/" rel="me noopener" target="_blank">instagram</a> · <a href="/privacy">privacy</a></footer>
+  <nav class="more" aria-label="More about STUNTDATE">
+    <a href="/create-gigs">Post a gig →</a>
+    <a href="/take-gigs">Get paid to be the gig →</a>
+    <a href="/about">Why humans only →</a>
+  </nav>
+
+  <footer><a href="https://stuntdate.com/">stuntdate.com</a> · <a href="/about">about</a> · <a href="https://www.instagram.com/stuntdate/" rel="me noopener" target="_blank">instagram</a> · <a href="/privacy">privacy</a></footer>
 </main>
 
 <script>
@@ -332,12 +341,12 @@ const form = $('signup'), msg = $('msg'), btn = $('addBtn');
 
 // Each choice is its own on/off switch — people can pick one or both.
 const gigPanel = $('gigPanel');
-function syncGigPanel(){
+function syncGigPanel(noFocus){
   const on = $('createGigs').getAttribute('aria-pressed') === 'true';
   gigPanel.classList.toggle('open', on);
   gigPanel.setAttribute('aria-hidden', on ? 'false' : 'true');
   ['gigName','gigPrice'].forEach(id => $(id).tabIndex = on ? 0 : -1);
-  if (on) setTimeout(() => $('gigName').focus({preventScroll:false}), 280);
+  if (on && !noFocus) setTimeout(() => $('gigName').focus({preventScroll:false}), 280);
 }
 document.querySelectorAll('.role').forEach(b =>
   b.addEventListener('click', () => {
@@ -352,6 +361,13 @@ $('gigPrice').addEventListener('input', e => {
   const i = v.indexOf('.'); if (i > -1) v = v.slice(0,i+1) + v.slice(i+1).replace(/\./g,'').slice(0,2);
   e.target.value = v;
 });
+
+// pre-select a side when arriving from /create-gigs or /take-gigs  (?role=create | take | both)
+(function preselect(){
+  const r = new URLSearchParams(location.search).get('role');
+  if (r === 'create' || r === 'both') { $('createGigs').setAttribute('aria-pressed','true'); syncGigPanel(true); }
+  if (r === 'take'   || r === 'both') { $('takeGigs').setAttribute('aria-pressed','true'); }
+})();
 
 function say(text, isErr){ msg.textContent = text; msg.classList.toggle('err', !!isErr); }
 
