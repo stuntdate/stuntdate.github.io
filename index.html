@@ -141,6 +141,12 @@
   .gig-box{border:3px solid var(--white);padding:20px 16px 22px;text-align:left;display:flex;flex-direction:column;gap:14px;position:relative}
   .gig-box::before{content:"";position:absolute;top:-15px;left:calc((100% - 16px)/4 - 12px);border:12px solid transparent;border-top:0;border-bottom-color:var(--white)}
   .gig-box .gig-h{font-family:var(--display);font-weight:400;font-size:24px;letter-spacing:.2px;line-height:1.1}
+  .gig-box .gig-h2{margin-top:10px}
+  .fmts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .fmt{min-height:64px;padding:8px;background:var(--black);color:var(--white);border:3px solid var(--white);border-radius:0;font-family:var(--mono);font-size:18px;letter-spacing:.3px;cursor:pointer;-webkit-appearance:none;appearance:none;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.2;-webkit-tap-highlight-color:transparent;transition:background .12s,color .12s}
+  .fmt small{font-size:12px;opacity:.75;margin-top:3px}
+  .fmt[aria-pressed="true"]{background:var(--white);color:var(--black)}
+  .fmt:focus-visible{outline:3px solid var(--red);outline-offset:3px}
   .gig-box label{font-size:15px;color:var(--grey);letter-spacing:.3px;display:block;margin-bottom:8px}
   .price{position:relative}
   .price span{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:#111;font-family:var(--mono);font-size:19px;pointer-events:none}
@@ -229,7 +235,12 @@
     <div class="gig" id="gigPanel" aria-hidden="true">
       <div>
         <div class="gig-box">
-          <p class="gig-h">What's the gig?</p>
+          <p class="gig-h">FaceTime or IRL?</p>
+          <div class="fmts" role="group" aria-label="FaceTime or in real life">
+            <button type="button" class="fmt" id="fmtFacetime" aria-pressed="false" tabindex="-1">FaceTime</button>
+            <button type="button" class="fmt" id="fmtIrl" aria-pressed="false" tabindex="-1">IRL<small>in real life</small></button>
+          </div>
+          <p class="gig-h gig-h2">What's the gig?</p>
           <div>
             <label for="gigName">Name the gig you'd create</label>
             <input type="text" id="gigName" maxlength="120" placeholder="e.g. walk my dog to the pier" autocomplete="off" tabindex="-1">
@@ -345,13 +356,20 @@ function syncGigPanel(noFocus){
   const on = $('createGigs').getAttribute('aria-pressed') === 'true';
   gigPanel.classList.toggle('open', on);
   gigPanel.setAttribute('aria-hidden', on ? 'false' : 'true');
-  ['gigName','gigPrice'].forEach(id => $(id).tabIndex = on ? 0 : -1);
-  if (on && !noFocus) setTimeout(() => $('gigName').focus({preventScroll:false}), 280);
+  ['fmtFacetime','fmtIrl','gigName','gigPrice'].forEach(id => $(id).tabIndex = on ? 0 : -1);
+  if (on && !noFocus) setTimeout(() => $('fmtFacetime').focus({preventScroll:false}), 280);
 }
 document.querySelectorAll('.role').forEach(b =>
   b.addEventListener('click', () => {
     b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
     if (b.id === 'createGigs') syncGigPanel();
+    if (msg.classList.contains('err')) say('');
+  })
+);
+// FaceTime / IRL — pick one or both
+document.querySelectorAll('.fmt').forEach(b =>
+  b.addEventListener('click', () => {
+    b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
     if (msg.classList.contains('err')) say('');
   })
 );
@@ -383,8 +401,12 @@ form.addEventListener('submit', async e => {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { say('Need a real email.', true); $('email').focus(); return; }
   if (!create_gigs && !take_gigs) { say('Pick one — or both.', true); return; }
 
-  let gig_name = null, gig_price = null;
+  let gig_name = null, gig_price = null, gig_format = null;
   if (create_gigs) {
+    const ft = $('fmtFacetime').getAttribute('aria-pressed') === 'true';
+    const irl = $('fmtIrl').getAttribute('aria-pressed') === 'true';
+    if (!ft && !irl) { say('FaceTime or IRL? Pick one — or both.', true); $('fmtFacetime').focus(); return; }
+    gig_format = ft && irl ? 'both' : (ft ? 'facetime' : 'irl');
     gig_name = $('gigName').value.trim();
     gig_price = parseFloat($('gigPrice').value);
     if (!gig_name) { say('Name your gig.', true); $('gigName').focus(); return; }
@@ -400,7 +422,7 @@ form.addEventListener('submit', async e => {
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
       method:'POST', headers,
-      body: JSON.stringify({ email, city: city || null, create_gigs, take_gigs, gig_name, gig_price, source: location.hostname || 'local' })
+      body: JSON.stringify({ email, city: city || null, create_gigs, take_gigs, gig_name, gig_price, gig_format, source: location.hostname || 'local' })
     });
     if (res.ok || res.status === 409) {                 // 409 = already on the list
       form.style.display = 'none';
