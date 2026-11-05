@@ -324,6 +324,36 @@
 const SUPABASE_URL = 'https://uteudsgyzjbqqupprvbh.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_67qWv22s-hW7gmldtJUCNg_Negs__jA';
 const TABLE        = 'beta_signups';
+const NOTIFY_TO    = 'stuntdate@gmail.com';   // every new signup is emailed here (via FormSubmit)
+
+// Email the team a "New signup" with all the details. Never blocks or breaks the signup.
+function notifyTeam(d){
+  try {
+    const yn = v => v ? 'YES' : 'no';
+    const fmt = { facetime:'FaceTime', irl:'In Real Life', both:'FaceTime + In Real Life' }[d.gig_format] || '—';
+    const u = new URL(location.href);
+    const when = new Date().toLocaleString('en-US', { timeZone:'America/Los_Angeles', dateStyle:'medium', timeStyle:'short' }) + ' (LA time)';
+    fetch('https://formsubmit.co/ajax/' + NOTIFY_TO, {
+      method:'POST', keepalive:true,
+      headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+      body: JSON.stringify({
+        _subject: 'New STUNTDATE signup: ' + d.email,
+        _template: 'table',
+        _captcha: 'false',
+        _replyto: d.email,
+        'Email': d.email,
+        'City': d.city || '—',
+        "I'll create gigs": yn(d.create_gigs),
+        "I'll take gigs": yn(d.take_gigs),
+        'FaceTime or In Real Life': d.create_gigs ? fmt : '—',
+        'The gig': d.gig_name || '—',
+        'Would pay': d.gig_price != null ? '$' + d.gig_price : '—',
+        'Signed up': when,
+        'Came from': u.searchParams.get('utm_source') || (document.referrer ? new URL(document.referrer).hostname : 'direct')
+      })
+    }).catch(()=>{});
+  } catch(e){}
+}
 
 const $ = id => document.getElementById(id);
 
@@ -425,6 +455,7 @@ form.addEventListener('submit', async e => {
       body: JSON.stringify({ email, city: city || null, create_gigs, take_gigs, gig_name, gig_price, gig_format, source: location.hostname || 'local' })
     });
     if (res.ok || res.status === 409) {                 // 409 = already on the list
+      if (res.ok) notifyTeam({ email, city, create_gigs, take_gigs, gig_name, gig_price, gig_format });
       form.style.display = 'none';
       if (res.status === 409) $('done').querySelector('.done-h').textContent = "You're already in.";
       $('done').classList.add('show');
