@@ -36,6 +36,7 @@
 {
   "@context": "https://schema.org",
   "@graph": [
+    {"@type": "FAQPage", "@id": "https://stuntdate.com/#faq", "mainEntity": [{"@type": "Question", "name": "What is STUNTDATE?", "acceptedAnswer": {"@type": "Answer", "text": "A humans-only gig platform. Everyday people create fun, out-of-the-ordinary paid gigs for each other — in real life or over FaceTime — and get paid the same day."}}, {"@type": "Question", "name": "How does it work?", "acceptedAnswer": {"@type": "Answer", "text": "Someone posts a gig and names their price. A real human takes it, shows up (or FaceTimes in), does the thing, and gets paid the same day."}}, {"@type": "Question", "name": "What kind of gigs?", "acceptedAnswer": {"@type": "Answer", "text": "Anything a human can do for another human. Walk my dog to the pier. Be my hype person at open mic. Stand in line for me. Teach me to skateboard. Keep me company on FaceTime while I clean my room."}}, {"@type": "Question", "name": "Is it a dating app?", "acceptedAnswer": {"@type": "Answer", "text": "No. It's gigs. You're hiring a human — or getting paid to be one."}}, {"@type": "Question", "name": "Why humans only?", "acceptedAnswer": {"@type": "Answer", "text": "Because the world is not our algorithm. No bots take gigs, and no AI does the work. Humans only. AI don't apply."}}, {"@type": "Question", "name": "When can I use it?", "acceptedAnswer": {"@type": "Answer", "text": "We're in beta and opening city by city. Get on the list, add your city, and we'll email you when gigs go live near you."}}]},
     {
       "@type": "Organization",
       "@id": "https://stuntdate.com/#org",
@@ -170,6 +171,22 @@
   .done p{font-size:18px;line-height:1.6;color:var(--grey)}
 
   footer{margin-top:46px;color:var(--dim);font-size:16px;letter-spacing:.5px}
+  /* ---------- how it works + faq ---------- */
+  .how,.faq{width:100%;margin-top:64px;text-align:left}
+  .sec-h{font-family:var(--display);font-weight:400;font-size:30px;line-height:1.1;margin-bottom:18px;text-align:center}
+  .steps{list-style:none;display:flex;flex-direction:column;gap:12px}
+  .steps li{display:flex;gap:16px;align-items:center;border:3px solid var(--white);padding:16px}
+  .steps span{font-family:var(--display);font-size:40px;line-height:1;color:var(--red);min-width:26px;text-align:center}
+  .steps div{font-size:16px;line-height:1.5;color:#cfcfcf}
+  .steps b{color:var(--white);font-weight:700}
+  .faq details{border-bottom:1px solid #333}
+  .faq details:first-of-type{border-top:1px solid #333}
+  .faq summary{cursor:pointer;list-style:none;padding:18px 34px 18px 0;position:relative;font-family:var(--display);font-size:21px;letter-spacing:.2px;color:var(--white)}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";position:absolute;right:4px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:26px;color:var(--red)}
+  .faq details[open] summary::after{content:"–"}
+  .faq summary:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+  .faq details p{padding:0 4px 20px 0;font-size:16px;line-height:1.65;color:#bdbdbd}
   footer a{color:inherit;text-decoration:none}
   footer a:hover{color:var(--grey);text-decoration:underline}
 
@@ -234,6 +251,44 @@
   <section class="done" id="done" aria-live="polite">
     <p class="done-h">You're in.</p>
     <p>We'll email you when the beta drops.<br>Humans only. Stay weird.</p>
+  </section>
+
+
+  <section class="how" aria-labelledby="how-h">
+    <h2 id="how-h" class="sec-h">How it works</h2>
+    <ol class="steps">
+      <li><span>1</span><div><b>Post a gig.</b> Name it. Name your price.</div></li>
+      <li><span>2</span><div><b>A human takes it.</b> IRL or over FaceTime.</div></li>
+      <li><span>3</span><div><b>Get paid same day.</b> No bots. No algorithm.</div></li>
+    </ol>
+  </section>
+
+  <section class="faq" aria-labelledby="faq-h">
+    <h2 id="faq-h" class="sec-h">Questions</h2>
+    <details>
+      <summary>What is STUNTDATE?</summary>
+      <p>A humans-only gig platform. Everyday people create fun, out-of-the-ordinary paid gigs for each other — in real life or over FaceTime — and get paid the same day.</p>
+    </details>
+    <details>
+      <summary>How does it work?</summary>
+      <p>Someone posts a gig and names their price. A real human takes it, shows up (or FaceTimes in), does the thing, and gets paid the same day.</p>
+    </details>
+    <details>
+      <summary>What kind of gigs?</summary>
+      <p>Anything a human can do for another human. Walk my dog to the pier. Be my hype person at open mic. Stand in line for me. Teach me to skateboard. Keep me company on FaceTime while I clean my room.</p>
+    </details>
+    <details>
+      <summary>Is it a dating app?</summary>
+      <p>No. It&#x27;s gigs. You&#x27;re hiring a human — or getting paid to be one.</p>
+    </details>
+    <details>
+      <summary>Why humans only?</summary>
+      <p>Because the world is not our algorithm. No bots take gigs, and no AI does the work. Humans only. AI don&#x27;t apply.</p>
+    </details>
+    <details>
+      <summary>When can I use it?</summary>
+      <p>We&#x27;re in beta and opening city by city. Get on the list, add your city, and we&#x27;ll email you when gigs go live near you.</p>
+    </details>
   </section>
 
   <footer><a href="https://stuntdate.com/">stuntdate.com</a> · <a href="https://www.instagram.com/stuntdate/" rel="me noopener" target="_blank">instagram</a> · <a href="/privacy">privacy</a></footer>
