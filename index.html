@@ -235,10 +235,10 @@
     <div class="gig" id="gigPanel" aria-hidden="true">
       <div>
         <div class="gig-box">
-          <p class="gig-h">FaceTime or IRL?</p>
-          <div class="fmts" role="group" aria-label="FaceTime or in real life">
+          <p class="gig-h">FaceTime or In Real Life?</p>
+          <div class="fmts" role="group" aria-label="FaceTime or In Real Life">
             <button type="button" class="fmt" id="fmtFacetime" aria-pressed="false" tabindex="-1">FaceTime</button>
-            <button type="button" class="fmt" id="fmtIrl" aria-pressed="false" tabindex="-1">IRL<small>in real life</small></button>
+            <button type="button" class="fmt" id="fmtIrl" aria-pressed="false" tabindex="-1">In Real Life</button>
           </div>
           <p class="gig-h gig-h2">What's the gig?</p>
           <div>
@@ -405,7 +405,7 @@ form.addEventListener('submit', async e => {
   if (create_gigs) {
     const ft = $('fmtFacetime').getAttribute('aria-pressed') === 'true';
     const irl = $('fmtIrl').getAttribute('aria-pressed') === 'true';
-    if (!ft && !irl) { say('FaceTime or IRL? Pick one — or both.', true); $('fmtFacetime').focus(); return; }
+    if (!ft && !irl) { say('FaceTime or In Real Life? Pick one — or both.', true); $('fmtFacetime').focus(); return; }
     gig_format = ft && irl ? 'both' : (ft ? 'facetime' : 'irl');
     gig_name = $('gigName').value.trim();
     gig_price = parseFloat($('gigPrice').value);
