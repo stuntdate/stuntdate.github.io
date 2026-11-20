@@ -165,7 +165,7 @@
         <p class="fine">Your contact is never shown on the board. Tip for FaceTime gigs: send a FaceTime link instead of your number.</p>
       </form>
     </div>
-    <div class="ok" id="postOk" hidden><h3>Got it.</h3><p>Once it's approved, it goes on the board.</p></div>
+    <div class="ok" id="postOk" hidden><h3>Got it.</h3><p>Once it's approved, it goes on the board.</p><button type="button" class="post" id="postAnother" style="margin-top:18px;width:100%">POST ANOTHER GIG +</button></div>
   </div>
 </div>
 
@@ -270,6 +270,7 @@ board.addEventListener('click',e=>{
   if(!was){ void ad.offsetWidth; ad.classList.add('on'); }
 });
 $('openPost').onclick=()=>open('postSheet');
+$('postAnother').onclick=()=>open('postSheet');
 $('openDone').onclick=e=>{e.preventDefault();open('doneSheet');};
 $('openThoughts').onclick=e=>{e.preventDefault();open('thoughtsSheet');};
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeAll);
