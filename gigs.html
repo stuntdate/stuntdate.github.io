@@ -9,20 +9,23 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#000000">
 <style>
+  @font-face{font-family:'Archivo';src:url('/archivo-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:'Archivo';src:url('/archivo-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+  @font-face{font-family:'Archivo';src:url('/archivo-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
   @font-face{font-family:'Anton';src:url('/anton.woff2') format('woff2');font-display:swap}
-  :root{--red:#ff1f2d;--display:'Anton',Impact,'Arial Narrow Bold',sans-serif;--mono:'Courier New',Courier,monospace}
+  :root{--red:#ff1f2d;--display:'Anton',Impact,'Arial Narrow Bold',sans-serif;--mono:'Archivo',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  html,body{background:#000;color:#fff}
+  html,body{background:#000;color:#F5EEDC}
   body{font-family:var(--mono);font-weight:700;-webkit-font-smoothing:antialiased;padding:28px 16px 60px;display:flex;justify-content:center}
   main{width:100%;max-width:880px}
   .preview{border:2px dashed var(--red);color:var(--red);font-size:12px;letter-spacing:1px;padding:8px 10px;text-align:center;margin-bottom:22px}
 
   /* header */
   .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .home{position:relative;display:inline-block;padding:8px 16px;color:#fff;text-decoration:none;font-family:var(--display);font-weight:400;font-size:24px}
+  .home{position:relative;display:inline-block;padding:8px 16px;color:#F5EEDC;text-decoration:none;font-family:var(--display);font-weight:400;font-size:24px}
   .home svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
   .home path{fill:none;stroke:var(--red);stroke-width:2.5;stroke-linecap:round;vector-effect:non-scaling-stroke}
-  .post{background:var(--red);color:#fff;border:0;font-family:var(--display);font-size:20px;padding:12px 16px;cursor:pointer}
+  .post{background:var(--red);color:#F5EEDC;border:0;font-family:var(--display);font-size:20px;padding:12px 16px;cursor:pointer}
   h1{font-family:var(--display);font-weight:400;font-size:clamp(48px,14vw,84px);line-height:.95;margin-top:28px;letter-spacing:.5px}
   h1 small{display:block;font-size:.38em;letter-spacing:2px;color:var(--red)}
   .sub{font-size:17px;line-height:1.5;margin-top:12px}
@@ -32,17 +35,17 @@
 
   /* filters */
   .filters{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
-  .filters button{background:#000;color:#fff;border:3px solid #fff;font-family:var(--mono);font-weight:700;font-size:15px;padding:10px 14px;cursor:pointer}
-  .filters button[aria-pressed="true"]{background:#fff;color:#000}
+  .filters button{background:#000;color:#F5EEDC;border:3px solid #F5EEDC;font-family:var(--mono);font-weight:700;font-size:15px;padding:10px 14px;cursor:pointer}
+  .filters button[aria-pressed="true"]{background:#F5EEDC;color:#000}
 
   /* the board — newspaper classifieds */
-  .board{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));border-top:3px solid #fff;border-left:3px solid #fff}
-  .ad{position:relative;border-right:3px solid #fff;border-bottom:3px solid #fff;padding:16px 16px 18px;cursor:pointer;display:flex;flex-direction:column;gap:10px;min-height:170px;-webkit-tap-highlight-color:transparent}
+  .board{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));border-top:3px solid #F5EEDC;border-left:3px solid #F5EEDC}
+  .ad{position:relative;border-right:3px solid #F5EEDC;border-bottom:3px solid #F5EEDC;padding:16px 16px 18px;cursor:pointer;display:flex;flex-direction:column;gap:10px;min-height:170px;-webkit-tap-highlight-color:transparent}
   .ad:hover{background:#0d0d0d}
   .tagrow{display:flex;justify-content:space-between;align-items:center;gap:8px}
   .gt{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 7px 2px}
-  .gt.ft{background:var(--red);color:#fff;border:2px solid var(--red)}
-  .gt.irl{background:#000;color:#fff;border:2px solid #fff}
+  .gt.ft{background:var(--red);color:#F5EEDC;border:2px solid var(--red)}
+  .gt.irl{background:#000;color:#F5EEDC;border:2px solid #F5EEDC}
   .city{font-size:12px;letter-spacing:1px;text-transform:uppercase}
   .q{font-size:16px;line-height:1.45;flex:1}
   .meta{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
@@ -53,38 +56,38 @@
   .circle path{fill:none;stroke:var(--red);stroke-width:4;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1}
   .ad.on .circle path{animation:draw .7s cubic-bezier(.6,.05,.3,1) forwards}
   @keyframes draw{to{stroke-dashoffset:0}}
-  .doit{display:none;margin-top:4px;background:#fff;color:#000;border:0;font-family:var(--display);font-size:22px;padding:12px;cursor:pointer;position:relative;z-index:3}
+  .doit{display:none;margin-top:4px;background:#F5EEDC;color:#000;border:0;font-family:var(--display);font-size:22px;padding:12px;cursor:pointer;position:relative;z-index:3}
   .ad.on .doit{display:block}
-  .doit:hover{background:var(--red);color:#fff}
-  .empty{padding:30px 16px;border-right:3px solid #fff;border-bottom:3px solid #fff;grid-column:1/-1}
+  .doit:hover{background:var(--red);color:#F5EEDC}
+  .empty{padding:30px 16px;border-right:3px solid #F5EEDC;border-bottom:3px solid #F5EEDC;grid-column:1/-1}
 
-  .done-link{display:block;margin-top:34px;text-align:center;font-family:var(--display);font-weight:400;font-size:24px;color:#fff;text-decoration:none;border:3px solid #fff;padding:16px}
-  .done-link:hover{background:#fff;color:#000}
+  .done-link{display:block;margin-top:34px;text-align:center;font-family:var(--display);font-weight:400;font-size:24px;color:#F5EEDC;text-decoration:none;border:3px solid #F5EEDC;padding:16px}
+  .done-link:hover{background:#F5EEDC;color:#000}
   .done-link.thoughts{margin-top:12px}
   footer{margin-top:36px;text-align:center;font-size:14px}
 
   /* sheets (forms) */
   .sheet{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.92);display:flex;align-items:flex-end;justify-content:center}
   .sheet[hidden]{display:none}
-  .panel{width:100%;max-width:520px;max-height:92vh;overflow-y:auto;background:#000;border:3px solid #fff;border-bottom:0;padding:22px 16px 28px;position:relative}
-  @media (min-width:700px){.sheet{align-items:center}.panel{border-bottom:3px solid #fff}}
-  .x{position:absolute;top:12px;right:12px;width:40px;height:40px;background:#000;color:#fff;border:3px solid #fff;font-size:18px;cursor:pointer}
+  .panel{width:100%;max-width:520px;max-height:92vh;overflow-y:auto;background:#000;border:3px solid #F5EEDC;border-bottom:0;padding:22px 16px 28px;position:relative}
+  @media (min-width:700px){.sheet{align-items:center}.panel{border-bottom:3px solid #F5EEDC}}
+  .x{position:absolute;top:12px;right:12px;width:40px;height:40px;background:#000;color:#F5EEDC;border:3px solid #F5EEDC;font-size:18px;cursor:pointer}
   .panel h2{font-family:var(--display);font-weight:400;font-size:32px;line-height:1.05;padding-right:46px}
   .panel .lead{font-size:14px;line-height:1.5;margin-top:8px}
-  .panel .gigq{border:3px solid #fff;padding:12px;margin-top:14px;font-size:14px;line-height:1.45}
+  .panel .gigq{border:3px solid #F5EEDC;padding:12px;margin-top:14px;font-size:14px;line-height:1.45}
   .panel .gigq .price{font-size:22px}
   form{display:flex;flex-direction:column;gap:14px;margin-top:18px}
   label{font-size:14px}
-  input[type=text],input[type=email],textarea,select{width:100%;margin-top:6px;padding:14px;background:#fff;color:#000;border:0;border-radius:6px;font-family:var(--mono);font-size:17px}
+  input[type=text],input[type=email],textarea,select{width:100%;margin-top:6px;padding:14px;background:#F5EEDC;color:#000;border:0;border-radius:6px;font-family:var(--mono);font-size:17px}
   textarea{min-height:84px;resize:vertical}
   input::placeholder,textarea::placeholder{color:#000;opacity:1}
   .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .pick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
-  .pick button{min-height:52px;background:#000;color:#fff;border:3px solid #fff;font-family:var(--mono);font-weight:700;font-size:15px;cursor:pointer}
-  .pick button[aria-pressed="true"]{background:#fff;color:#000}
+  .pick button{min-height:52px;background:#000;color:#F5EEDC;border:3px solid #F5EEDC;font-family:var(--mono);font-weight:700;font-size:15px;cursor:pointer}
+  .pick button[aria-pressed="true"]{background:#F5EEDC;color:#000}
   .chk{display:flex;gap:10px;align-items:center;font-size:15px}
   .chk input{width:22px;height:22px;accent-color:var(--red)}
-  .send{background:var(--red);color:#fff;border:0;font-family:var(--display);font-size:26px;padding:16px;cursor:pointer;margin-top:4px}
+  .send{background:var(--red);color:#F5EEDC;border:0;font-family:var(--display);font-size:26px;padding:16px;cursor:pointer;margin-top:4px}
   .fine{font-size:12px;line-height:1.5}
   .ok{text-align:center;padding:26px 0 6px}
   .ok h3{font-family:var(--display);font-weight:400;font-size:40px}
@@ -95,8 +98,8 @@
   .err{color:var(--red);font-size:14px;min-height:18px}
   .rv-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
   .rv-actions button{height:58px;border:0;font-family:var(--display);font-size:24px;cursor:pointer}
-  .rv-approve{background:var(--red);color:#fff}
-  .rv-reject{background:#000;color:#fff;border:3px solid #fff!important}
+  .rv-approve{background:var(--red);color:#F5EEDC}
+  .rv-reject{background:#000;color:#F5EEDC;border:3px solid #F5EEDC!important}
   .rv-meta{font-size:14px;line-height:1.6;margin-top:12px}
 </style>
 </head>

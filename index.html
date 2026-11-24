@@ -60,12 +60,15 @@
 }
 </script>
 <style>
+  @font-face{font-family:'Archivo';src:url('/archivo-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:'Archivo';src:url('/archivo-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+  @font-face{font-family:'Archivo';src:url('/archivo-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
   @font-face{font-family:'Anton';src:url('/anton.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
   .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
-  :root{--red:#ff1f2d;--grey:#fff;--display:'Anton',Impact,'Arial Narrow Bold',sans-serif;--mono:'Courier New',Courier,monospace}
+  :root{--red:#ff1f2d;--grey:#F5EEDC;--display:'Anton',Impact,'Arial Narrow Bold',sans-serif;--mono:'Archivo',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  html,body{background:#000;color:#fff}
+  html,body{background:#000;color:#F5EEDC}
   body{font-family:var(--mono);-webkit-font-smoothing:antialiased;display:flex;justify-content:center;padding:56px 16px 40px}
   main{width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;text-align:center}
   .logo{position:relative;width:100%;max-width:400px;aspect-ratio:400/130;display:flex;align-items:center;justify-content:center}
@@ -74,23 +77,23 @@
   .logo path{fill:none;stroke:var(--red);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
   .tag{font-family:var(--display);font-weight:400;font-size:34px;line-height:1.1;margin-top:34px}
   .sub{font-size:19px;margin-top:14px}
-  .what{font-size:17px;line-height:1.5;margin-top:18px;color:#fff;max-width:360px}
-  .what b{color:#fff}
-  .how3{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:6px;text-align:left;font-size:15px;line-height:1.4;color:#fff}
+  .what{font-size:17px;line-height:1.5;margin-top:18px;color:#F5EEDC;max-width:360px}
+  .what b{color:#F5EEDC;font-weight:600}
+  .how3{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:6px;text-align:left;font-size:15px;line-height:1.4;color:#F5EEDC}
   .how3 li{display:flex;gap:10px;align-items:baseline}
   .how3 span{font-family:var(--display);color:var(--red);font-size:20px;min-width:14px}
 
   /* ---------- real gigs box ---------- */
-  .real{width:100%;margin-top:26px;border:3px solid #fff;text-align:left}
+  .real{width:100%;margin-top:26px;border:3px solid #F5EEDC;text-align:left}
   .real summary{list-style:none;cursor:pointer;padding:14px 16px 12px;-webkit-tap-highlight-color:transparent}
   .real summary::-webkit-details-marker{display:none}
   .gt{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 7px 2px;margin-bottom:8px}
-  .gt.ft{background:var(--red);color:#fff;border:2px solid var(--red)}
-  .gt.irl{background:#000;color:#fff;border:2px solid #fff}
+  .gt.ft{background:var(--red);color:#F5EEDC;border:2px solid var(--red)}
+  .gt.irl{background:#000;color:#F5EEDC;border:2px solid #F5EEDC}
   .label{font-size:12px;letter-spacing:1.5px;color:var(--grey);text-transform:uppercase;line-height:1.5;display:block}
   .rot{margin-top:8px;min-height:96px;transition:opacity .35s}
   .rot.fade{opacity:0}
-  .bar{height:5px;background:#000;border:1px solid #fff;margin-top:12px;overflow:hidden}
+  .bar{height:5px;background:#000;border:1px solid #F5EEDC;margin-top:12px;overflow:hidden}
   .bar i{display:block;height:100%;width:100%;background:var(--red);transform-origin:left;transform:scaleX(0)}
   .bar i.go{animation:fill 4s linear forwards}
   .real.hold .bar i.go{animation-play-state:paused}
@@ -98,93 +101,93 @@
   .count{display:block;font-size:11px;color:var(--grey);letter-spacing:1px;margin-top:6px;text-align:right}
   .q{font-size:16px;line-height:1.45}
   .q.long{font-size:13.5px;line-height:1.4}
-  .meta{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:6px}
+  .meta{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 10px;margin-top:6px}
   .price{font-family:var(--display);font-size:24px;color:var(--red)}
-  .who{font-size:12px;color:#fff;text-align:right;letter-spacing:.3px}
-  .send{display:inline-block;margin-top:8px;background:none;border:0;padding:4px 0;color:#fff;font-family:var(--mono);font-size:13px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+  .who{font-size:12px;color:#F5EEDC;text-align:right;letter-spacing:.3px;white-space:nowrap;margin-left:auto}
+  .send{display:inline-block;margin-top:8px;background:none;border:0;padding:4px 0;color:#F5EEDC;font-family:var(--mono);font-size:13px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
   .send:hover{color:var(--red)}
-  .seeall{display:block;margin-top:10px;padding-top:10px;border-top:1px solid #fff;font-family:var(--display);font-size:20px}
+  .seeall{display:block;margin-top:10px;padding-top:10px;border-top:1px solid #F5EEDC;font-family:var(--display);font-size:20px}
   .seeall::after{content:" ▾";color:var(--red)}
   .real[open] .seeall::after{content:" ▴"}
   .real[open] .rot{display:none}
-  .list{list-style:none;max-height:58vh;overflow-y:auto;border-top:1px solid #fff;padding:4px 16px 8px}
-  .list li{padding:12px 0;border-bottom:1px solid #fff}
+  .list{list-style:none;max-height:58vh;overflow-y:auto;border-top:1px solid #F5EEDC;padding:4px 16px 8px}
+  .list li{padding:12px 0;border-bottom:1px solid #F5EEDC}
   .list .q{font-size:15px}
   .list .price{font-size:19px}
   .list .who{font-size:12px}
   .intro{font-size:13px;color:var(--grey);line-height:1.5;padding:12px 0 8px}
-  .postyours{display:block;width:100%;padding:16px;background:#fff;color:#000;border:0;font-family:var(--display);font-size:22px;cursor:pointer;text-align:center}
-  .postyours:hover{background:var(--red);color:#fff}
-  .ages{font-size:14px;color:#fff;margin-top:14px;letter-spacing:.5px}
+  .postyours{display:block;width:100%;padding:16px;background:#F5EEDC;color:#000;border:0;font-family:var(--display);font-size:22px;cursor:pointer;text-align:center}
+  .postyours:hover{background:var(--red);color:#F5EEDC}
+  .ages{font-size:14px;color:#F5EEDC;margin-top:14px;letter-spacing:.5px}
   .ages b{font-family:var(--display);font-weight:400;color:var(--red);font-size:18px}
 
-  .fine{color:#fff;font-size:18px;line-height:1.6;margin-top:22px}
+  .fine{color:#F5EEDC;font-size:18px;line-height:1.6;margin-top:22px}
   form{width:100%;margin-top:28px;display:flex;flex-direction:column;gap:22px}
-  input[type=email],input[type=text]{width:100%;height:58px;padding:0 20px;background:#fff;color:#111;border:1px solid #d9d9d9;border-radius:6px;font-family:var(--mono);font-size:19px}
+  input[type=email],input[type=text]{width:100%;height:58px;padding:0 20px;background:#F5EEDC;color:#111;border:1px solid #d9d9d9;border-radius:6px;font-family:var(--mono);font-size:19px}
   input::placeholder{color:#000;opacity:1}
   .roles{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .role{min-height:92px;padding:12px;font-family:var(--mono);font-size:18px;line-height:1.35;background:#000;color:#fff;border:3px solid #fff;cursor:pointer}
+  .role{min-height:92px;padding:12px;font-family:var(--mono);font-size:18px;line-height:1.35;background:#000;color:#F5EEDC;border:3px solid #F5EEDC;cursor:pointer}
   .role{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
   .role small{font-size:13px;color:var(--red);letter-spacing:.5px}
-  .role[aria-pressed="true"]{background:#fff;color:#000}
-  .gigbox{display:none;border:3px solid #fff;padding:18px 16px;text-align:left;flex-direction:column;gap:12px}
+  .role[aria-pressed="true"]{background:#F5EEDC;color:#000}
+  .gigbox{display:none;border:3px solid #F5EEDC;padding:18px 16px;text-align:left;flex-direction:column;gap:12px}
   .gigbox.open{display:flex}
   .gigbox .h{font-family:var(--display);font-size:24px}
   .gigbox label{font-size:15px;color:var(--grey)}
-  .okshow{display:flex;gap:10px;align-items:flex-start;font-size:14px!important;color:#fff!important;line-height:1.4;cursor:pointer}
+  .okshow{display:flex;gap:10px;align-items:flex-start;font-size:14px!important;color:#F5EEDC!important;line-height:1.4;cursor:pointer}
   .okshow input{width:20px;height:20px;accent-color:var(--red);flex-shrink:0;margin-top:1px}
-  .add{height:96px;width:100%;background:var(--red);color:#fff;border:0;font-family:var(--display);font-size:36px;cursor:pointer}
+  .add{height:96px;width:100%;background:var(--red);color:#F5EEDC;border:0;font-family:var(--display);font-size:36px;cursor:pointer}
   .sm{font-size:15px;color:var(--grey);margin-top:4px}
   .fmts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .fmt{min-height:56px;background:#000;color:#fff;border:3px solid #fff;font-family:var(--mono);font-size:17px;cursor:pointer}
-  .fmt[aria-pressed="true"]{background:#fff;color:#000}
+  .fmt{min-height:56px;background:#000;color:#F5EEDC;border:3px solid #F5EEDC;font-family:var(--mono);font-size:17px;cursor:pointer}
+  .fmt[aria-pressed="true"]{background:#F5EEDC;color:#000}
   .done{display:none;width:100%;margin-top:40px;flex-direction:column;align-items:center;gap:16px}
   .done.show{display:flex}
   .done-h{font-family:var(--display);font-size:44px;line-height:1.05}
-  .done-p{font-size:18px;line-height:1.6;color:#fff}
+  .done-p{font-size:18px;line-height:1.6;color:#F5EEDC}
   .err{color:var(--red);font-size:15px;min-height:20px;margin-top:-10px;text-align:left}
   .faq{width:100%;margin-top:64px;text-align:left}
   .sec-h{font-family:var(--display);font-weight:400;font-size:30px;line-height:1.1;margin-bottom:18px;text-align:center}
-  .faq details{border-bottom:1px solid #fff}
-  .faq details:first-of-type{border-top:1px solid #fff}
+  .faq details{border-bottom:1px solid #F5EEDC}
+  .faq details:first-of-type{border-top:1px solid #F5EEDC}
   .faq summary{cursor:pointer;list-style:none;padding:18px 34px 18px 0;position:relative;font-family:var(--display);font-size:21px}
   .faq summary::-webkit-details-marker{display:none}
   .faq summary::after{content:"+";position:absolute;right:4px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:26px;color:var(--red)}
   .faq details[open] summary::after{content:"–"}
-  .faq details p{padding:0 4px 20px 0;font-size:16px;line-height:1.65;color:#fff}
+  .faq details p{padding:0 4px 20px 0;font-size:16px;line-height:1.65;color:#F5EEDC}
   .more{width:100%;margin-top:48px;display:flex;flex-direction:column;gap:12px}
-  .more a{display:block;border:3px solid #fff;padding:18px 16px;color:#fff;text-decoration:none;font-family:var(--display);font-size:22px;text-align:left}
-  .more a:hover{background:#fff;color:#000}
-  footer{margin-top:46px;color:#fff;font-size:16px}
-  .label,.who,.send,.count,.intro,.okshow,.gigbox label,.how3,.what,.sub,.fine,.done-p,.faq details p,footer,.q{font-weight:700}
+  .more a{display:block;border:3px solid #F5EEDC;padding:18px 16px;color:#F5EEDC;text-decoration:none;font-family:var(--display);font-size:22px;text-align:left}
+  .more a:hover{background:#F5EEDC;color:#000}
+  footer{margin-top:46px;color:#F5EEDC;font-size:16px}
+  .label,.who,.send,.count,.intro,.okshow,.gigbox label,.how3,.what,.sub,.fine,.done-p,.faq details p,footer,.q{font-weight:600}
   .price-wrap{position:relative;margin-top:8px}
   .price-wrap span{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:#111;font-size:19px;pointer-events:none}
   .price-wrap input{padding-left:40px!important}
-  .adult{display:flex;gap:10px;align-items:center;font-size:16px;font-weight:700;color:#fff;cursor:pointer;text-align:left}
+  .adult{display:flex;gap:10px;align-items:center;font-size:16px;font-weight:700;color:#F5EEDC;cursor:pointer;text-align:left}
   .adult input{width:22px;height:22px;accent-color:var(--red);flex-shrink:0}
   .msg{min-height:22px;font-size:16px;font-weight:700;line-height:1.5;color:var(--red);text-align:left;margin-top:-8px}
   .hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;overflow:hidden}
   .add:disabled{filter:grayscale(.4) brightness(.8);cursor:wait}
   footer a{color:inherit;text-decoration:none}
-  .sticky{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--red);color:#fff;text-align:center;text-decoration:none;font-family:var(--display);font-size:22px;letter-spacing:.3px;padding:16px 16px calc(16px + env(safe-area-inset-bottom));transform:translateY(110%);transition:transform .25s}
+  .sticky{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--red);color:#F5EEDC;text-align:center;text-decoration:none;font-family:var(--display);font-size:22px;letter-spacing:.3px;padding:16px 16px calc(16px + env(safe-area-inset-bottom));transform:translateY(110%);transition:transform .25s}
   .sticky.on{transform:none}
   @media (max-width:699px){body{padding-bottom:96px}}
   @media (min-width:700px){.sticky{display:none}}
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#fff;color:#000;padding:10px 16px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#F5EEDC;color:#000;padding:10px 16px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
   .toast.show{opacity:1}
-  .watch{margin-top:26px;background:none;border:0;color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px;-webkit-tap-highlight-color:transparent}
+  .watch{margin-top:26px;background:none;border:0;color:#F5EEDC;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px;-webkit-tap-highlight-color:transparent}
   .watch .isyou{font-family:var(--display);font-size:30px;letter-spacing:.3px}
   .watch .arrow{width:62px;height:34px;overflow:visible}
   .watch .arrow path{fill:none;stroke:var(--red);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
-  .watch .playc{width:58px;height:58px;border-radius:50%;border:4px solid var(--red);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:22px;padding-left:4px;transition:background .15s}
+  .watch .playc{width:58px;height:58px;border-radius:50%;border:4px solid var(--red);display:inline-flex;align-items:center;justify-content:center;color:#F5EEDC;font-size:22px;padding-left:4px;transition:background .15s}
   .watch:hover .playc{background:var(--red)}
   .vbox{position:fixed;inset:0;z-index:50;background:#000;display:flex;align-items:center;justify-content:center;padding:56px 0}
   .vbox[hidden]{display:none}
   .vbox video{width:100%;max-width:960px;max-height:100%;background:#000}
-  .vclose{position:absolute;top:10px;right:12px;width:44px;height:44px;background:none;border:3px solid #fff;color:#fff;font-size:20px;cursor:pointer}
+  .vclose{position:absolute;top:10px;right:12px;width:44px;height:44px;background:none;border:3px solid #F5EEDC;color:#F5EEDC;font-size:20px;cursor:pointer}
 
   .price.long{font-size:18px;line-height:1.2}
-  .card{width:100%;max-width:360px;border:3px solid #fff;padding:26px 18px 20px;text-align:center;margin-top:8px}
+  .card{width:100%;max-width:360px;border:3px solid #F5EEDC;padding:26px 18px 20px;text-align:center;margin-top:8px}
   .num{position:relative;display:inline-block;padding:16px 38px}
   .num b{position:relative;z-index:1;font-family:var(--display);font-weight:400;font-size:58px;line-height:1;letter-spacing:1px}
   .num svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
@@ -192,7 +195,7 @@
   .done.show .num path{animation:draw 1.1s cubic-bezier(.6,.05,.3,1) .3s forwards}
   .card.nonum .num{display:none}
   .pig{font-family:var(--display);font-weight:400;font-size:32px;line-height:1.1;margin-top:16px;overflow-wrap:anywhere}
-  .xlate{background:none;border:0;color:#fff;text-decoration:underline;text-underline-offset:3px;font-family:var(--mono);font-weight:700;font-size:13px;margin-top:10px;cursor:pointer;padding:4px}
+  .xlate{background:none;border:0;color:#F5EEDC;text-decoration:underline;text-underline-offset:3px;font-family:var(--mono);font-weight:700;font-size:13px;margin-top:10px;cursor:pointer;padding:4px}
   .eng{display:none;font-size:16px;margin-top:6px}
   .card.shown .eng{display:block}
   .card.shown .xlate{display:none}
@@ -201,9 +204,10 @@
   .cbrand{font-size:12px;letter-spacing:2px;margin-top:6px;color:var(--red)}
   .cardbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:360px}
   .cardbtns .postyours{font-size:20px;padding:14px 8px}
-  .seegigs{display:block;width:100%;max-width:360px;margin-top:10px;padding:16px;background:var(--red);color:#fff;font-family:var(--display);font-size:22px;text-align:center;text-decoration:none;letter-spacing:.02em}
-  .seegigs:hover{background:#fff;color:#000}
+  .seegigs{display:block;width:100%;max-width:360px;margin-top:10px;padding:16px;background:var(--red);color:#F5EEDC;font-family:var(--display);font-size:22px;text-align:center;text-decoration:none;letter-spacing:.02em}
+  .seegigs:hover{background:#F5EEDC;color:#000}
   @keyframes draw{to{stroke-dashoffset:0}}
+  .adult a{color:#F5EEDC;text-decoration:underline}
 </style>
 </head>
 <body>
@@ -214,22 +218,21 @@
   </div>
   <h2 class="tag">You're the gig.</h2>
   <p class="sub">IRL &amp; FaceTime for bed rotters</p>
-  <p class="what"><b>Out-of-the-ordinary paid gigs,</b><br>posted by people like you.</p>
+  <p class="what"><b>Out-of-the-ordinary gigs,</b><br>created by people like you.</p>
   <ol class="how3">
-    <li><span>1</span>A human creates a gig &amp; sets the price.</li>
-    <li><span>2</span>A Stuntdate (your wingman) goes for it, gets it, does it, gets paid.</li>
-    <li><span>3</span>Same-day payment after the gig is finished.</li>
+    <li><span>1</span>Create your gig, set your price, post&nbsp;it.</li>
+    <li><span>2</span>A Stuntdate (your wingman) goes for the gig, does the gig, gets paid same&nbsp;day.</li>
   </ol>
 
   <details class="real" id="real">
     <summary>
-      <span class="label">Real gigs from real people · inspiration only</span>
+      <span class="label">46 gig ideas from real people, ages <span style="white-space:nowrap">18–78</span></span>
       <div class="rot" id="rot"></div>
       <div class="bar"><i id="barFill"></i></div><span class="count" id="count"></span>
-      <span class="seeall">See 47 real gigs</span>
+      <span class="seeall">See 46 gig ideas</span>
     </summary>
     <ul class="list" id="list">
-      <li class="intro">We asked 47 people: "What would you post on Stuntdate? What would you pay?" These are their actual responses. Just for inspiration — these gigs aren't live. Yours could be.</li>
+      <li class="intro">We asked people: "What would you post on Stuntdate? What would you pay?" These are their responses, lightly edited. Just for inspiration — these gigs aren't live. Yours could be.</li>
     </ul>
     <button type="button" class="postyours" id="postYours">Post yours →</button>
   </details>
@@ -417,7 +420,7 @@ form.addEventListener('submit', async e => {
   if (!$('is18').checked) { say('The beta is 18+. Tick the box to confirm.', true); $('is18').focus(); return; }
 
   let gig_name = null, gig_price = null, gig_format = null, show_gig = null;
-  const card = CARD_LINES[Math.floor(Math.random()*CARD_LINES.length)];
+  const card = nextCard();
   if (create_gigs) {
     const ft = $('fmtFacetime').getAttribute('aria-pressed') === 'true';
     const irl = $('fmtIrl').getAttribute('aria-pressed') === 'true';
@@ -462,199 +465,193 @@ form.addEventListener('submit', async e => {
 });
 
 /* ============================================================
-   REAL GIGS BOX — 47 real gigs from real people
+   REAL GIGS BOX — 46 gig ideas from real people
    ============================================================ */
 const G = [
 [
 "I don't want to go to the funeral alone.",
 "$400",
-"26-year-old female",
+"26 F",
 "irl"
 ],
 [
 "I'll be your designated driver for a weekend night (6pm-5am).",
 "$120 + gas",
-"22-year-old male",
+"22 M",
 "irl"
 ],
 [
 "Need Stuntdates to come to my cat's cake & Friskies buffet birthday party.",
 "$20 per Stuntdate",
-"25-year-old male",
+"25 M",
 "irl"
 ],
 [
 "Throw a whipped cream pie in my friend's face when he opens the door. That's it. He will laugh, don't worry about retaliation.",
 "$100",
-"24-year-old male",
+"24 M",
 "irl"
 ],
 [
-"Coffee—Farmers market—beach walk (girls only) just moved here making new friends.",
+"Coffee—Farmers market—beach walk (girls only). Just moved here, making new friends.",
 "$5",
-"27-year-old female",
+"27 F",
 "irl"
 ],
 [
 "I need 33 Stuntdates to be Santa's elves for a Christmas fair.",
 "$60 each",
-"23-year-old male",
+"23 M",
 "irl"
 ],
 [
-"Curious about trying a new restaurant, anyone want to keep me company?",
+"Curious about trying a new restaurant. Anyone want to keep me company?",
 "$20",
-"66-year-old female",
+"66 F",
 "irl"
 ],
 [
 "I'll come hit on you while you're with someone.",
 "$20",
-"20-year-old male",
+"20 M",
 "irl"
 ],
 [
 "Need a date to bring to my ex's wedding so I don't look like a loser for a couple of hours.",
 "$1000",
-"29-year-old female",
+"29 F",
 "irl"
 ],
 [
 "In a band, need an audience.",
 "$15 per Stuntdate",
-"20-year-old male, 22-year-old male, 19-year-old female",
+"a band, 19–22",
 "irl"
 ],
 [
-"I'm in hairdressing school, I'll give you a haircut or hairstyle. Link to my previous work.",
-"$20 haircut · $15 hairstyling · $30 for both",
-"23-year-old female",
+"I'm in hairdressing school. I'll give you a haircut or hairstyle. Link to my previous work.",
+"$20 haircut · $15 hairstyling · $30 both",
+"23 F",
 "irl"
 ],
 [
 "Nervous Delta flyer—Hawaii round-trip.",
 "ticket + $400",
-"27-year-old female",
+"27 F",
 "irl"
 ],
 [
-"Cooking with a nonna in Italy, to the sounds of Sinatra.",
+"I'd like to cook with a nonna in Italy, to the sounds of Sinatra.",
 "$5",
-"72-year-old male",
+"72 M",
 "ft"
 ],
 [
-"I need to speak to an elder for guidance, you must be over 30.",
+"I need to speak to an elder for guidance. You must be over 30.",
 "$20",
-"21-year-old female",
+"21 F",
 "ft"
 ],
 [
-"Best friends wedding prank—last minute bridesmaids swap, everyone's in on it but the bride.",
+"Best friend's wedding prank—last-minute bridesmaid swap, everyone's in on it but the bride.",
 "$1000",
-"26-year-old male, 26-year-old female",
+"26 M & 26 F",
 "irl"
 ],
 [
 "Piano-playing Stuntdate for my grandma, who loves show tunes. 1 hour.",
 "$50",
-"35-year-old male, gift for my grandma",
+"35 M",
 "ft"
 ],
 [
 "Can pretend to be your butler.",
 "$20/hr",
-"24-year-old male",
+"24 M",
 "irl"
 ],
 [
 "Got a truck? Let's go to the Flea Market crack of dawn (5-8:45 am).",
 "$25",
-"52-year-old female",
+"52 F",
 "irl"
 ],
 [
-"I'll write you a superb cover letter based on your resume and a brief phone call. See attached link to examples.",
-"$30",
-"22-year-old male",
-"ft"
-],
-[
-"Chinese buffet challenge support team! I need a wet towel man and a coach, they only give you 45 minutes (any gender/age).",
+"Chinese buffet challenge support team! I need a wet towel man and a coach. They only give you 45 minutes (any gender/age).",
 "$200",
-"23-year-old male",
+"23 M",
 "irl"
 ],
 [
 "My friends and I will be paparazzi for you, or ask you for an autograph.",
 "$20 per paparazzi / fan",
-"22-year-old male, 23-year-old female",
+"22 M & 23 F",
 "irl"
 ],
 [
-"I'll pretend to be your girlfriend in front of your family or any one of your choosing. For long functions like holiday dinner, parties, weddings.",
+"I'll pretend to be your girlfriend in front of your family. For long functions like holiday dinners, parties, weddings.",
 "$700",
-"20-year-old female",
+"20 F",
 "irl"
 ],
 [
 "Lonely? Dial in to speak to a human.",
 "$10",
-"18-year-old female",
+"18 F",
 "ft"
 ],
 [
-"Pretend you're an old friend of mine, make a funny best man speech at my wedding—send in a sample—funny & bawdy is a plus.",
+"Pretend you're an old friend of mine. Make a funny best man speech at my wedding. Send in a sample. Funny & bawdy is a plus.",
 "$900",
-"30-year-old male",
+"30 M",
 "irl"
 ],
 [
 "I want someone to wait in line for me.",
 "$20",
-"22-year-old male",
+"22 M",
 "irl"
 ],
 [
-"I'm a fashion student and will be your personal shopping advisor for a full/half day. I can take you to a selection of niche boutiques, second hand, and jewelry stores to curate what you'd like your look to be. See attached link to my portfolio.",
-"$275 half day (3-5 stores) · $500 full day (6-12 stores)",
-"21-year-old female",
+"I'll take you to niche boutiques, second hand, and jewelry stores you'd never know about, and curate the look you want. I'm a fashion student and will be your personal shopping advisor for a half or full day. Link to my portfolio.",
+"$275 half day · $500 full day",
+"21 F",
 "irl"
 ],
 [
 "Friend flaked on me for drinks tonight. Any Stuntdates want to fill in?",
 "$20",
-"19-year-old male",
+"19 M",
 "irl"
 ],
 [
 "Pickleball partner, LA.",
 "$50",
-"66-year-old male",
+"66 M",
 "irl"
 ],
 [
 "Need an alibi. Nothing illegal.",
 "$40",
-"29-year-old male",
+"29 M",
 "irl"
 ],
 [
-"I need 10 Stuntdates must look like my sister (wear red dress red lipstick) to mingle around a surprise birthday party. Long blond hair 5ft7 wears large black frame reading glasses.",
+"I need 10 Stuntdates who look like my sister (red dress, red lipstick) to mingle around a surprise birthday party. Long blond hair, 5ft7, large black frame reading glasses.",
 "$100 each",
-"33-year-old female",
+"33 F",
 "irl"
 ],
 [
-"Feed the homeless 11am-2pm at the local church.",
+"Come with me to feed the homeless 11am-2pm at the local church.",
 "$5",
-"39-year-old female",
+"39 F",
 "irl"
 ],
 [
 "I'm in culinary school and need honest opinions. I'll cook you a three course meal.",
-"$30 for one person · $55 for two · $120 for three to five",
-"23-year-old male",
+"$30 solo · $55 for two · $120 for 3–5",
+"23 M",
 "irl"
 ],
 [
@@ -676,15 +673,15 @@ const G = [
 "irl"
 ],
 [
-"I'd love a FaceTime bestie to do best friend stuff with without leaving the house: talk makeup, try on clothes, listen to music, gossip.",
+"I'd love a FaceTime bestie to do best friend stuff with, without leaving the house. Makeup talk, try-ons, music, gossip.",
 "$20/hr",
-"",
+"20s F",
 "ft"
 ],
 [
 "Teach me how to play mahjong.",
 "$35/hr",
-"",
+"40s F",
 "ft"
 ],
 [
@@ -696,7 +693,7 @@ const G = [
 [
 "Anyone want to watch Gossip Girl and talk about stupid stuff?",
 "$15",
-"",
+"30s F",
 "ft"
 ],
 [
@@ -744,12 +741,12 @@ const G = [
 [
 "Would love to find some people my age to talk to.",
 "$5",
-"78-year-old widow",
+"78, widow",
 "ft"
 ]
 ];
 const tag = g => g[3]==='ft' ? '<span class="gt ft">FaceTime</span>' : '<span class="gt irl">In Real Life</span>';
-const item = (g,i) => `${tag(g)}<p class="q${g[0].length>140?' long':''}">${g[0]}</p><div class="meta"><span class="price${g[1].length>14?' long':''}">${g[1]}</span>${g[2]?`<span class="who">${g[2]}</span>`:''}</div><button type="button" class="send" data-i="${i}">Know someone for this? Send it →</button>`;
+const item = (g,i) => `${tag(g)}<p class="q${g[0].length>140?' long':''}">${g[0]}</p><div class="meta"><span class="price${g[1].length>14?' long':''}">${g[1]}</span>${g[2]?`<span class="who">created by ${g[2]}</span>`:''}</div><button type="button" class="send" data-i="${i}">Know someone for this? Send it →</button>`;
 document.getElementById('list').insertAdjacentHTML('beforeend', G.map((g,i)=>`<li>${item(g,i)}</li>`).join(''));
 
 // fresh order every visit: shuffle, then alternate FaceTime / In Real Life
@@ -823,7 +820,27 @@ document.addEventListener('click',()=>{ if(document.body.classList.contains('joi
 /* ============================================================
    THE STUNTDATE CARD — signup number + a random pig latin line
    ============================================================ */
-const CARD_LINES = [["Ornbay orfay isthay.", "Born for this."], ["Ertifiedcay umanhay.", "Certified human."], ["Aystay eirdway.", "Stay weird."], ["Obotsray ouldcay evernay.", "Robots could never."], ["Eartbeathay etectedday.", "Heartbeat detected."], ["Aturalnay-ornbay alenttay.", "Natural-born talent."], ["Umanshay onlyyay. Overqualifiedyay.", "Humans only. Overqualified."], ["Ogay orfay ityay. Etgay ityay. Oday ityay.", "Go for it. Get it. Do it."], ["Ootay umanhay otay automateyay.", "Too human to automate."], ["Oudlypray otnay ayay obotray.", "Proudly not a robot."], ["Ethay orldway isyay otnay ouryay algorithmyay.", "The world is not your algorithm."], ["Ouryay alenttay ashay onay ellsay-ybay ateday.", "Your talent has no sell-by date."], ["Ayay earthay ikelay oursyay isyay onnagay akemay illionsmay.", "A heart like yours is gonna make millions."], ["Otnay ouryay averageyay STD.", "Not your average STD."], ["Omohay apienssay oday ityay etterbay.", "Homo sapiens do it better."], ["Ornbay erifiedvay.", "Born verified."], ["Ouyay ereway ornbay ithway ityay.", "You were born with it."], ["Umanhay irstfay, educatedyay atyay irthbay.", "Human first, educated at birth."], ["Anyoneyay ithway ayay eartbeathay alifiesquay.", "Anyone with a heartbeat qualifies."], ["Ogglestay offyay!", "Toggles off!"], ["Untablestay incesay ayday oneyay.", "Stuntable since day one."], ["Optay umanhay.", "Top human."], ["Oniestmay akermay.", "Moniest maker."], ["Ostmay eativecray.", "Most creative."], ["Originalistyay.", "Originalist."], ["Obalglay untstarstay.", "Global stuntstar."]];
+const CARD_LINES = [["Ornbay orfay isthay.", "Born for this."], ["Ertifiedcay umanhay.", "Certified human."], ["Aystay eirdway.", "Stay weird."], ["Obotsray ouldcay evernay.", "Robots could never."], ["Eartbeathay etectedday.", "Heartbeat detected."], ["Aturalnay-ornbay alenttay.", "Natural-born talent."], ["Umanshay onlyyay. Overqualifiedyay.", "Humans only. Overqualified."], ["Ogay orfay ityay. Etgay ityay. Oday ityay.", "Go for it. Get it. Do it."], ["Ootay umanhay otay automateyay.", "Too human to automate."], ["Ethay orldway isyay otnay ouryay algorithmyay.", "The world is not your algorithm."], ["Ouryay alenttay ashay onay ellsay-ybay ateday.", "Your talent has no sell-by date."], ["Ayay earthay ikelay oursyay isyay onnagay akemay illionsmay.", "A heart like yours is gonna make millions."], ["Otnay ouryay averageyay STD (Untdatestay).", "Not your average STD (Stuntdate)."], ["Omohay apienssay oday ityay etterbay.", "Homo sapiens do it better."], ["Ornbay erifiedvay.", "Born verified."], ["Ouyay ereway ornbay ithway ityay.", "You were born with it."], ["Umanhay irstfay, educatedyay atyay irthbay.", "Human first, educated at birth."], ["Anyoneyay ithway ayay eartbeathay alifiesquay.", "Anyone with a heartbeat qualifies."], ["Ogglestay offyay!", "Toggles off!"], ["Optay umanhay.", "Top human."], ["Oniestmay akermay.", "Moniest maker."], ["Obalglay untstarstay.", "Global stuntstar."]];
+
+/* deals the card lines like a shuffled deck: every line once, in random order, and never the same line twice in a row on one device */
+let _lastCard = -1;
+function nextCard(){
+  const N = CARD_LINES.length;
+  let deck = [];
+  try {
+    deck = JSON.parse(localStorage.getItem('sd_deck') || '[]').filter(i => Number.isInteger(i) && i >= 0 && i < N);
+    const l = parseInt(localStorage.getItem('sd_last'), 10); if (Number.isInteger(l)) _lastCard = l;
+  } catch (e) {}
+  if (!deck.length) {
+    deck = Array.from({length:N}, (_,i)=>i);
+    for (let i=N-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [deck[i],deck[j]]=[deck[j],deck[i]]; }
+    if (deck[N-1] === _lastCard && N > 1) { [deck[N-1],deck[0]]=[deck[0],deck[N-1]]; }
+  }
+  const idx = deck.pop();
+  _lastCard = idx;
+  try { localStorage.setItem('sd_deck', JSON.stringify(deck)); localStorage.setItem('sd_last', String(idx)); } catch (e) {}
+  return CARD_LINES[idx];
+}
 let cardData = null;
 async function showCard(card, d){
   const pad = n => '#' + String(n).padStart(4,'0');
@@ -849,8 +866,8 @@ async function cardImage(){
   const W=1080, H=1920, c=document.createElement('canvas'); c.width=W; c.height=H;
   const x=c.getContext('2d');
   x.fillStyle='#000'; x.fillRect(0,0,W,H);
-  x.strokeStyle='#fff'; x.lineWidth=8; x.strokeRect(90,330,W-180,1180);
-  x.textAlign='center'; x.fillStyle='#fff';
+  x.strokeStyle='#F5EEDC'; x.lineWidth=8; x.strokeRect(90,330,W-180,1180);
+  x.textAlign='center'; x.fillStyle='#F5EEDC';
   let y=600;
   if (cardData.num){
     x.font='170px Anton, Impact, sans-serif'; x.fillText(cardData.num, W/2, y+60);
