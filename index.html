@@ -84,7 +84,7 @@
 
   /* ---------- real gigs box ---------- */
   .real{width:100%;margin-top:26px;border:3px solid #F5EEDC;text-align:left}
-  .real summary{list-style:none;cursor:pointer;padding:14px 16px 12px;-webkit-tap-highlight-color:transparent}
+  .real summary{list-style:none;cursor:default;padding:14px 16px 12px;-webkit-tap-highlight-color:transparent}
   .real summary::-webkit-details-marker{display:none}
   .gt{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 7px 2px;margin-bottom:8px}
   .gt.ft{background:var(--red);color:#F5EEDC;border:2px solid var(--red)}
@@ -180,6 +180,8 @@
   @media (min-width:700px){.sticky{display:none}}
   .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#F5EEDC;color:#000;padding:10px 16px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none}
   .toast.show{opacity:1}
+  .boardlink{display:block;margin-top:14px;padding:14px 16px;border:3px solid #F5EEDC;color:#F5EEDC;font-family:var(--display);font-size:22px;letter-spacing:.02em;text-align:center;text-decoration:none;-webkit-tap-highlight-color:transparent}
+  .boardlink:hover{background:#F5EEDC;color:#000}
   .watch{margin-top:26px;background:none;border:0;color:#F5EEDC;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px;-webkit-tap-highlight-color:transparent}
   .watch .isyou{font-family:var(--display);font-size:30px;letter-spacing:.3px}
   .watch .arrow{width:62px;height:34px;overflow:visible}
@@ -246,11 +248,9 @@
       <button type="button" class="askbtn" id="postYours">So what's yours?</button>
       <div class="rot" id="rot"></div>
       <div class="bar"><i id="barFill"></i></div><span class="count" id="count"></span>
-      <span class="seeall">See all 46 gigs</span>
     </summary>
-    <ul class="list" id="list">
-    </ul>
   </details>
+  <a class="boardlink" href="/gigs">GIG BOARD →</a>
   <button type="button" class="watch" id="watchBtn" aria-label="Is this you? Play the Stuntdate video">
     <span class="isyou">Is this you?</span>
     <svg class="arrow" viewBox="0 0 90 46" aria-hidden="true"><path d="M4 30 C20 8, 48 4, 74 22"/><path d="M60 22 L76 23 L70 9"/></svg>
@@ -791,7 +791,6 @@ const G = [
 ];
 const tag = g => g[3]==='ft' ? '<span class="gt ft">FaceTime</span>' : '<span class="gt irl">In Real Life</span>';
 const item = (g,i) => `${tag(g)}<p class="q${g[0].length>140?' long':''}">${g[0]}</p><div class="meta"><span class="price${g[1].length>14?' long':''}">${g[1]}</span>${g[2]?`<span class="who">created by ${g[2]}</span>`:''}</div><button type="button" class="send" data-i="${i}">Send to a friend, spark a new gig idea →</button>`;
-document.getElementById('list').insertAdjacentHTML('beforeend', G.map((g,i)=>`<li>${item(g,i)}</li>`).join(''));
 
 // fresh order every visit: shuffle, then alternate FaceTime / In Real Life
 const shuf = a => { for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
@@ -802,6 +801,7 @@ let n=0, paused=false, typing=false, left=4000, last=Date.now();
 const show = () => { rot.innerHTML=item(G[ORDER[n]],ORDER[n]); count.textContent=`${n+1} / ${G.length}`; fill.classList.remove('go'); void fill.offsetWidth; fill.classList.add('go'); left=4000; last=Date.now(); };
 const next = () => { rot.classList.add('fade'); setTimeout(()=>{ n=(n+1)%ORDER.length; show(); rot.classList.remove('fade'); },300); };
 show();
+real.querySelector('summary').addEventListener('click',e=>e.preventDefault());
 const hold = h => { paused=h; real.classList.toggle('hold',h||typing); };
 rot.addEventListener('pointerenter',()=>hold(true)); rot.addEventListener('pointerleave',()=>hold(false));
 rot.addEventListener('touchstart',()=>hold(true),{passive:true}); rot.addEventListener('touchend',()=>setTimeout(()=>hold(false),1500));
