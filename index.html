@@ -46,8 +46,7 @@
       "slogan": "You're the gig.",
       "description": "Humans-only, 24-hour gig platform where everyday people post out-of-the-ordinary paid IRL and FaceTime gigs for each other. Same-day payment after the gig is finished.",
       "email": "julie@stuntdate.com",
-      "sameAs": ["https://www.instagram.com/stuntdate/"],
-      "founder": { "@type": "Person", "name": "Julie Daniels Janklow" }
+      "sameAs": ["https://www.instagram.com/stuntdate/"]
     },
     {
       "@type": "WebSite",
@@ -131,6 +130,9 @@
   .role{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
   .role small{font-size:13px;color:var(--red);letter-spacing:.5px}
   .role[aria-pressed="true"]{background:#F5EEDC;color:#000}
+  .roleboth{grid-column:1/-1;min-height:64px;padding:10px;font-family:var(--mono);font-size:18px;line-height:1.35;background:#000;color:#F5EEDC;border:3px solid #F5EEDC;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+  .roleboth small{font-size:13px;color:var(--red);letter-spacing:.5px}
+  .roleboth[aria-pressed="true"]{background:#F5EEDC;color:#000}
   .gigbox{display:none;border:3px solid #F5EEDC;padding:18px 16px;text-align:left;flex-direction:column;gap:12px}
   .gigbox.open{display:flex}
   .gigbox .h{font-family:var(--display);font-size:24px}
@@ -263,6 +265,7 @@
     <div class="roles" role="group" aria-label="What do you want to do?">
       <button type="button" class="role" id="createGigs" aria-pressed="false">I'll create gigs<small>I pay</small></button>
       <button type="button" class="role" id="takeGigs" aria-pressed="false">I'll take gigs<small>I get paid</small></button>
+      <button type="button" class="roleboth" id="bothGigs" aria-pressed="false">I'll do both<small>create and take</small></button>
     </div>
     <div class="gigbox" id="gigPanel" aria-hidden="true">
       <p class="h">Your gig idea &amp; price</p>
@@ -280,7 +283,7 @@
       <label class="okshow"><input type="checkbox" id="showGig" checked> OK to show my gig on Stuntdate (no name, just my gig &amp; price)</label>
     </div>
     <label class="adult"><input type="checkbox" id="is18"> <span>I'm 18 or older and agree to the <a href="/terms" target="_blank">Terms</a>.</span></label>
-    <label class="adult"><input type="checkbox" id="emailMe"> <span>Email me the latest gigs (weekly&nbsp;at&nbsp;most).</span></label>
+    <label class="adult"><input type="checkbox" id="emailMe"> <span>Email me the latest gigs, once a week at most.</span></label>
     <div class="hp" aria-hidden="true"><label>Leave empty <input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>
     <button type="submit" class="add" id="addBtn">ADD ME</button>
     <p class="msg" id="msg" role="status" aria-live="polite"></p>
@@ -390,10 +393,19 @@ function syncGigPanel(noFocus){
   ['fmtFacetime','fmtIrl','gigName','gigPrice'].forEach(id => $(id).tabIndex = on ? 0 : -1);
   if (on && !noFocus) setTimeout(() => $('fmtFacetime').focus({preventScroll:false}), 280);
 }
+function syncBoth(){ $('bothGigs').setAttribute('aria-pressed', ($('createGigs').getAttribute('aria-pressed') === 'true' && $('takeGigs').getAttribute('aria-pressed') === 'true') ? 'true' : 'false'); }
+$('bothGigs').addEventListener('click', () => {
+  const on = $('bothGigs').getAttribute('aria-pressed') !== 'true';
+  $('createGigs').setAttribute('aria-pressed', on ? 'true' : 'false');
+  $('takeGigs').setAttribute('aria-pressed', on ? 'true' : 'false');
+  syncGigPanel(); syncBoth();
+  if (msg.classList.contains('err')) say('');
+});
 document.querySelectorAll('.role').forEach(b =>
   b.addEventListener('click', () => {
     b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
     if (b.id === 'createGigs') syncGigPanel();
+    syncBoth();
     if (msg.classList.contains('err')) say('');
   })
 );
@@ -416,6 +428,7 @@ $('gigPrice').addEventListener('input', e => {
   const r = new URLSearchParams(location.search).get('role');
   if (r === 'create' || r === 'both') { $('createGigs').setAttribute('aria-pressed','true'); syncGigPanel(true); }
   if (r === 'take'   || r === 'both') { $('takeGigs').setAttribute('aria-pressed','true'); }
+  syncBoth();
 })();
 
 function say(text, isErr){ msg.textContent = text; msg.classList.toggle('err', !!isErr); }
@@ -775,7 +788,7 @@ const G = [
 ]
 ];
 const tag = g => g[3]==='ft' ? '<span class="gt ft">FaceTime</span>' : '<span class="gt irl">In Real Life</span>';
-const item = (g,i) => `${tag(g)}<p class="q${g[0].length>140?' long':''}">${g[0]}</p><div class="meta"><span class="price${g[1].length>14?' long':''}">${g[1]}</span>${g[2]?`<span class="who">created by ${g[2]}</span>`:''}</div><button type="button" class="send" data-i="${i}">Know someone for this? Send it →</button>`;
+const item = (g,i) => `${tag(g)}<p class="q${g[0].length>140?' long':''}">${g[0]}</p><div class="meta"><span class="price${g[1].length>14?' long':''}">${g[1]}</span>${g[2]?`<span class="who">created by ${g[2]}</span>`:''}</div><button type="button" class="send" data-i="${i}">Send to a friend, spark a new gig idea →</button>`;
 document.getElementById('list').insertAdjacentHTML('beforeend', G.map((g,i)=>`<li>${item(g,i)}</li>`).join(''));
 
 // fresh order every visit: shuffle, then alternate FaceTime / In Real Life
@@ -801,7 +814,7 @@ document.addEventListener('click', async e=>{
   e.preventDefault(); e.stopPropagation();
   const g=G[b.dataset.i];
   logShare(g, b.closest('.list') ? 'list' : 'box');
-  const text=`"${g[0]}" ${g[1]} — this is so you. A real gig a real person asked for, no longer available. This is the kind of thing people post on STUNTDATE (humans only). Join the beta:`;
+  const text=`"${g[0]}" ${g[1]} — a real person asked for this on STUNTDATE (humans only). Thought of you, or it might spark your own idea. Join the beta:`;
   const url='https://stuntdate.com/?utm_source=share';
   try{ if(navigator.share){ await navigator.share({text,url}); return; } }catch(_){ return; }
   try{ await navigator.clipboard.writeText(text+' '+url); }catch(_){}
@@ -866,7 +879,7 @@ $('addAnother').addEventListener('click', () => {
   document.body.classList.remove('joined');
   document.body.classList.add('addingmore');
   form.style.display = '';
-  $('createGigs').setAttribute('aria-pressed','true'); syncGigPanel(true);
+  $('createGigs').setAttribute('aria-pressed','true'); syncGigPanel(true); syncBoth();
   ['fmtFacetime','fmtIrl'].forEach(id => $(id).setAttribute('aria-pressed','false'));
   $('gigName').value = ''; $('gigPrice').value = ''; moreGigs.innerHTML = ''; renumberGigs();
   btn.disabled = false; btn.textContent = 'ADD GIG'; say('');
@@ -876,7 +889,7 @@ $('addAnother').addEventListener('click', () => {
 
 // "Post yours" → jump to the form with "I'll create gigs" picked
 document.getElementById('postYours').onclick=()=>{
-  $('createGigs').setAttribute('aria-pressed','true'); syncGigPanel(true);
+  $('createGigs').setAttribute('aria-pressed','true'); syncGigPanel(true); syncBoth();
   real.open=false;
   $('signup').scrollIntoView({behavior:'smooth'});
   setTimeout(()=>$('fmtFacetime').focus({preventScroll:true}),500);
