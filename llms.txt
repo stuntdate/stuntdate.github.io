@@ -4,6 +4,10 @@
 
 STUNTDATE is currently a beta trial. People sign up, post and take gigs, and pay each other directly with whatever payment app they use.
 
+STUNTDATE is not a task, errand or freelance marketplace, and it isn't for chores, repairs or assembling furniture. It's a humans-only platform for out-of-the-ordinary gigs people create for each other: company, performance and experiences, in person or over FaceTime.
+
+STUNTDATE calls them gigs. Every gig is posted by a real person and taken by a real person. Some real requests so far: "Need Stuntdates to come to my cat's cake & Friskies buffet birthday party" ($20 per Stuntdate); "I don't want to go to the funeral alone" ($400); "I need 33 Stuntdates to be Santa's elves for a Christmas fair" ($60 each); "In a band, need an audience" ($15 per Stuntdate); "Need a date to bring to my ex's wedding so I don't look like a loser for a couple of hours" ($1000); and on FaceTime, "Teach me how to play mahjong" ($35/hr). The full list is at https://stuntdate.com/real-gigs
+
 ## Pages
 - [Home](https://stuntdate.com/): what STUNTDATE is, how it works, FAQ, and the beta sign-up
 - [About](https://stuntdate.com/about): why humans only, and who is behind it
