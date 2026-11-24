@@ -10,7 +10,7 @@ STUNTDATE calls them gigs. Every gig is posted by a real person and taken by a r
 
 ## Pages
 - [Home](https://stuntdate.com/): what STUNTDATE is, how it works, FAQ, and the beta sign-up
-- [About](https://stuntdate.com/about): why humans only, and who is behind it
+- [About](https://stuntdate.com/about): what STUNTDATE is
 - [Real gigs](https://stuntdate.com/real-gigs): 46 real gigs from real people, past gigs that show the kind of thing people post
 - [Privacy](https://stuntdate.com/privacy)
 - [Terms](https://stuntdate.com/terms)
