@@ -266,7 +266,6 @@
     </div>
     <div class="gigbox" id="gigPanel" aria-hidden="true">
       <p class="h">Your gig idea &amp; price</p>
-      <p class="sm" style="margin-top:-6px">Not posted yet. We'll save it for the beta.</p>
       <p class="sm">FaceTime or In Real Life?</p>
       <div class="fmts" role="group" aria-label="FaceTime or In Real Life">
         <button type="button" class="fmt" id="fmtFacetime" aria-pressed="false" tabindex="-1">FaceTime</button>
@@ -289,7 +288,7 @@
 
   <section class="done" id="done" aria-live="polite">
     <p class="done-h">You're in.</p>
-    <p class="done-p">We'll reach out when the beta drops.</p>
+    <p class="done-p">We'll reach out.</p>
     <div class="card" id="card">
       <div class="num" id="cardNum"><svg viewBox="0 0 400 130" preserveAspectRatio="none" aria-hidden="true"><path d="M86 26 C150 6, 260 2, 330 14 C390 26, 412 58, 392 86 C366 118, 270 128, 180 126 C90 124, 18 108, 8 74 C0 44, 50 18, 130 8 C190 1, 245 2, 276 6"/></svg><b id="numTxt"></b></div>
       <p class="pig" id="pig"></p>
@@ -480,7 +479,7 @@ form.addEventListener('submit', async e => {
       form.style.display = 'none';
       document.body.classList.add('joined');
       $('done').querySelector('.done-h').textContent = !isNew ? (create_gigs ? "Gig added." : "You're in. Added.") : "You're in.";
-      $('done').querySelector('.done-p').textContent = (!isNew && create_gigs) ? "Add as many as you want." : "We'll reach out when the beta drops.";
+      $('done').querySelector('.done-p').textContent = (!isNew && create_gigs) ? "Add as many as you want." : "We'll reach out.";
       showCard(card, { city, create_gigs, take_gigs, isNew });
       $('done').classList.add('show');
       $('done').scrollIntoView({ behavior:'smooth', block:'center' });
