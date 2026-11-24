@@ -98,6 +98,7 @@
   .bar i.go{animation:fill 4s linear forwards}
   .real.hold .bar i.go{animation-play-state:paused}
   @keyframes fill{to{transform:scaleX(1)}}
+  .pastnote{display:block;font-size:13px;font-weight:600;line-height:1.4;margin-top:4px;color:#F5EEDC}
   .count{display:block;font-size:11px;color:var(--grey);letter-spacing:1px;margin-top:6px;text-align:right}
   .q{font-size:16px;line-height:1.45}
   .q.long{font-size:13.5px;line-height:1.4}
@@ -226,13 +227,14 @@
 
   <details class="real" id="real">
     <summary>
-      <span class="label">46 gig ideas from real people, ages <span style="white-space:nowrap">18–78</span></span>
+      <span class="label">46 real gigs from real people, ages <span style="white-space:nowrap">18–78</span></span>
+      <span class="pastnote">Past requests, no longer available.</span>
       <div class="rot" id="rot"></div>
       <div class="bar"><i id="barFill"></i></div><span class="count" id="count"></span>
-      <span class="seeall">See 46 gig ideas</span>
+      <span class="seeall">See all 46 gigs</span>
     </summary>
     <ul class="list" id="list">
-      <li class="intro">We asked people: "What would you post on Stuntdate? What would you pay?" These are their responses, lightly edited. Just for inspiration — these gigs aren't live. Yours could be.</li>
+      <li class="intro">We asked people: "What would you post and pay?" These are the past requests, no longer available. What's yours?</li>
     </ul>
     <button type="button" class="postyours" id="postYours">Post yours →</button>
   </details>
@@ -772,7 +774,7 @@ document.addEventListener('click', async e=>{
   e.preventDefault(); e.stopPropagation();
   const g=G[b.dataset.i];
   logShare(g, b.closest('.list') ? 'list' : 'box');
-  const text=`"${g[0]}" ${g[1]} — this is so you. Real gig idea on STUNTDATE (humans only). Get on the beta:`;
+  const text=`"${g[0]}" ${g[1]} — this is so you. A real gig a real person asked for, no longer available. This is the kind of thing people post on STUNTDATE (humans only). Join the beta:`;
   const url='https://stuntdate.com/?utm_source=share';
   try{ if(navigator.share){ await navigator.share({text,url}); return; } }catch(_){ return; }
   try{ await navigator.clipboard.writeText(text+' '+url); }catch(_){}

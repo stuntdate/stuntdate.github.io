@@ -59,6 +59,10 @@
   .doit{display:none;margin-top:4px;background:#F5EEDC;color:#000;border:0;font-family:var(--display);font-size:22px;padding:12px;cursor:pointer;position:relative;z-index:3}
   .ad.on .doit{display:block}
   .doit:hover{background:var(--red);color:#F5EEDC}
+  .share{align-self:flex-start;margin-top:-2px;background:none;border:0;padding:8px 0 2px;color:#F5EEDC;font-family:var(--mono);font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer;position:relative;z-index:3}
+  .share:hover{color:var(--red)}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:#F5EEDC;color:#000;font-weight:600;font-size:14px;padding:10px 16px;opacity:0;pointer-events:none;transition:.25s;z-index:99}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
   .empty{padding:30px 16px;border-right:3px solid #F5EEDC;border-bottom:3px solid #F5EEDC;grid-column:1/-1}
 
   .done-link{display:block;margin-top:34px;text-align:center;font-family:var(--display);font-weight:400;font-size:24px;color:#F5EEDC;text-decoration:none;border:3px solid #F5EEDC;padding:16px}
@@ -229,6 +233,8 @@
   </div>
 </div>
 
+<div class="toast" id="toast">Copied — paste it to a friend</div>
+
 <script>
 const SUPABASE_URL='https://uteudsgyzjbqqupprvbh.supabase.co';
 const SUPABASE_KEY='sb_publishable_67qWv22s-hW7gmldtJUCNg_Negs__jA';
@@ -255,6 +261,7 @@ function render(){
       <div class="tagrow"><span class="gt ${g.format}">${tagName(g.format)}</span><span class="city">${esc(where)}</span></div>
       <p class="q">${esc(g.gig)}</p>
       <div class="meta"><span class="price">${esc(g.price)}</span><span class="when">${esc(g.when_text||'')}</span></div>
+      ${booked?'':'<button class="share" type="button">Know someone for this? Send it →</button>'}
       ${booked?'':'<button class="doit" type="button">I\'LL DO IT</button>'}
     </article>`;}).join(''):'<p class="empty">No gigs here yet. Be the first: POST A GIG +</p>';
 }
@@ -263,7 +270,24 @@ document.querySelectorAll('.filters button').forEach(b=>b.onclick=()=>{filter=b.
 
 const open=id=>{const s=$(id);s.hidden=false;s.querySelector('.formwrap').hidden=false;const ok=s.querySelector('.ok');if(ok)ok.hidden=true;document.body.style.overflow='hidden';};
 const closeAll=()=>{document.querySelectorAll('.sheet').forEach(s=>s.hidden=true);document.body.style.overflow='';};
+const toast=$('toast');
+function logShare(g){
+  try{
+    if(navigator.webdriver||location.hostname!=='stuntdate.com') return;
+    fetch(SUPABASE_URL+'/rest/v1/share_clicks',{method:'POST',keepalive:true,headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify({gig:g.gig,gig_price:g.price,place:'board'})}).catch(()=>{});
+  }catch(e){}
+}
+async function shareGig(g){
+  logShare(g);
+  const where=g.format==='ft'?'FaceTime':('In Real Life'+(g.city?', '+g.city:''));
+  const text=`"${g.gig}" ${g.price} (${where}) \u2014 this is so you. A real gig open right now on STUNTDATE (humans only). Join the beta:`;
+  const url='https://stuntdate.com/?utm_source=share';
+  try{ if(navigator.share){ await navigator.share({text,url}); return; } }catch(_){ return; }
+  try{ await navigator.clipboard.writeText(text+' '+url); }catch(_){}
+  toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),1800);
+}
 board.addEventListener('click',e=>{
+  const sh=e.target.closest('.share'); if(sh){ e.stopPropagation(); shareGig(GIGS[sh.closest('.ad').dataset.i]); return; }
   const ad=e.target.closest('.ad'); if(!ad||ad.classList.contains('booked')) return;
   if(e.target.closest('.doit')){ const g=GIGS[ad.dataset.i];
     $('takeGig').innerHTML=`<span class="gt ${g.format}">${tagName(g.format)}</span><p style="margin:8px 0">${esc(g.gig)}</p><span class="price">${esc(g.price)}</span> · ${esc(g.city||'Anywhere')} · ${esc(g.when_text||'')}`;
