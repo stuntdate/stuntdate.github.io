@@ -790,17 +790,22 @@ const shuf = a => { for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 const ORDER = (()=>{ const f=shuf(G.map((_,i)=>i).filter(i=>G[i][3]==='ft')), r=shuf(G.map((_,i)=>i).filter(i=>G[i][3]!=='ft')), o=[];
   while(f.length||r.length){ if(r.length) o.push(r.pop()); if(f.length) o.push(f.pop()); } return o; })();
 const rot = document.getElementById('rot'), real=document.getElementById('real'), fill=document.getElementById('barFill'), count=document.getElementById('count');
-let n=0, paused=false, typing=false, left=4000, last=Date.now();
+let n=0, paused=false, typing=false, frozen=false, left=4000, last=Date.now();
 const show = () => { rot.innerHTML=item(G[ORDER[n]],ORDER[n]); count.textContent=`${n+1} / ${G.length}`; fill.classList.remove('go'); void fill.offsetWidth; fill.classList.add('go'); left=4000; last=Date.now(); };
-const next = () => { rot.classList.add('fade'); setTimeout(()=>{ n=(n+1)%ORDER.length; show(); rot.classList.remove('fade'); },300); };
+const next = () => { rot.classList.add('fade'); setTimeout(()=>{ if(frozen){ rot.classList.remove('fade'); return; } n=(n+1)%ORDER.length; show(); rot.classList.remove('fade'); },300); };
 show();
 real.querySelector('summary').addEventListener('click',e=>e.preventDefault());
-const hold = h => { paused=h; real.classList.toggle('hold',h||typing); };
-rot.addEventListener('pointerenter',()=>hold(true)); rot.addEventListener('pointerleave',()=>hold(false));
-rot.addEventListener('touchstart',()=>hold(true),{passive:true}); rot.addEventListener('touchend',()=>setTimeout(()=>hold(false),1500));
-// stop once they start filling in the form, so nothing moves under their thumb
-document.getElementById('signup').addEventListener('focusin',()=>{typing=true; real.classList.add('hold');});
-setInterval(()=>{ const now=Date.now(), dt=now-last; last=now; if(paused||typing||real.open) return; left-=dt; if(left<=0){ left=4000; next(); } },100);
+const syncHold = () => real.classList.toggle('hold', paused||typing||frozen);
+const hold = h => { paused=h; syncHold(); };
+// mouse: hover holds the gig. phone: tap a gig to freeze it, tap again to let it move
+rot.addEventListener('pointerenter',e=>{ if(e.pointerType==='mouse') hold(true); }); rot.addEventListener('pointerleave',e=>{ if(e.pointerType==='mouse') hold(false); });
+rot.addEventListener('click',e=>{ if(e.target.closest('.send')) return; frozen=!frozen; syncHold(); });
+// stop while they type in the form, so nothing moves under their thumb; move again once they leave it
+const signupEl = document.getElementById('signup');
+signupEl.addEventListener('focusin',e=>{ if(e.target.matches('input:not([type=checkbox]),textarea')){ typing=true; syncHold(); } });
+signupEl.addEventListener('focusout',e=>{ if(!signupEl.contains(e.relatedTarget)){ typing=false; syncHold(); } });
+new IntersectionObserver(([e])=>{ if(!e.isIntersecting){ typing=false; syncHold(); } }).observe(signupEl);
+setInterval(()=>{ const now=Date.now(), dt=now-last; last=now; if(paused||typing||frozen||real.open) return; left-=dt; if(left<=0){ left=4000; next(); } },100);
 
 // "Send it" — phone share sheet (iMessage, WhatsApp, IG…), or copy on desktop
 const toast=document.getElementById('toast');
