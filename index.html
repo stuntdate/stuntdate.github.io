@@ -206,6 +206,13 @@
   .cardbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:360px}
   .cardbtns .postyours{font-size:20px;padding:14px 8px}
   .seegigs{display:block;width:100%;max-width:360px;margin-top:10px;padding:16px;background:var(--red);color:#F5EEDC;font-family:var(--display);font-size:22px;text-align:center;text-decoration:none;letter-spacing:.02em}
+  .plusgig{width:100%;padding:14px;background:transparent;color:#F5EEDC;border:2px dashed #F5EEDC;font-family:var(--display);font-size:20px;letter-spacing:.02em;cursor:pointer}
+  .plusgig:hover{background:var(--red);border-color:var(--red);border-style:solid}
+  .moregigs{display:flex;flex-direction:column;gap:12px}
+  .xgig{display:flex;flex-direction:column;gap:12px;border-top:2px solid #F5EEDC;padding-top:14px}
+  .xgig .xh{display:flex;justify-content:space-between;align-items:center;font-family:var(--display);font-size:22px;color:#F5EEDC;margin:0}
+  .xgig .xrm{background:none;border:0;color:#F5EEDC;font-size:22px;cursor:pointer;padding:4px 8px}
+  .xgig .xrm:hover{color:var(--red)}
   .addmore{max-width:360px;margin-top:10px;background:transparent;color:#F5EEDC;border:2px solid #F5EEDC}
   .addmore:hover{background:var(--red);border-color:var(--red)}
   .seegigs:hover{background:#F5EEDC;color:#000}
@@ -269,6 +276,8 @@
       <input type="text" id="gigName" maxlength="120" placeholder="e.g. teach me mahjong" autocomplete="off" tabindex="-1" style="margin-top:-4px">
       <label for="gigPrice">Your price</label>
       <div class="price-wrap" style="margin-top:-4px"><span>$</span><input type="text" id="gigPrice" inputmode="decimal" maxlength="7" placeholder="40" autocomplete="off" tabindex="-1"></div>
+      <div id="moreGigs" class="moregigs"></div>
+      <button type="button" class="plusgig" id="plusGig">+ ADD ANOTHER GIG</button>
       <label class="okshow"><input type="checkbox" id="showGig" checked> OK to show my gig on Stuntdate (no name, just my gig &amp; price)</label>
     </div>
     <label class="adult"><input type="checkbox" id="is18"> <span>I'm 18 or older and agree to the <a href="/terms" target="_blank">Terms</a>.</span></label>
@@ -439,6 +448,8 @@ form.addEventListener('submit', async e => {
     gig_price = Math.round(gig_price * 100) / 100;
     show_gig = $('showGig').checked;
   }
+  let extras = [];
+  if (create_gigs) { const x = readExtraGigs(); if (x.error) { say(x.error, true); x.el.focus(); return; } extras = x.gigs; }
 
   btn.disabled = true; btn.textContent = 'ADDING…'; say('');
 
@@ -465,7 +476,7 @@ form.addEventListener('submit', async e => {
     }
     if (ok) {
       // their gig idea also goes to the Gig Board as "waiting for approval" (J approves or rejects it by email) — new or returning
-      if (create_gigs) postSignupGig({ gig_name, gig_price, gig_format, city, email });
+      if (create_gigs) { postSignupGig({ gig_name, gig_price, gig_format, city, email }); extras.forEach(g => postSignupGig({ ...g, city, email })); }
       form.style.display = 'none';
       document.body.classList.add('joined');
       $('done').querySelector('.done-h').textContent = !isNew ? (create_gigs ? "Gig added." : "You're in. Added.") : "You're in.";
@@ -809,6 +820,47 @@ function logShare(g, place){
   } catch(e){}
 }
 
+// "+ ADD ANOTHER GIG" inside the form → one more gig block (FaceTime/IRL, name, price). Up to 10 per signup.
+const moreGigs = $('moreGigs');
+function renumberGigs(){
+  moreGigs.querySelectorAll('.xgig .xn').forEach((el,i) => el.textContent = 'Gig ' + (i + 2));
+  $('plusGig').style.display = moreGigs.children.length >= 9 ? 'none' : '';
+}
+$('plusGig').addEventListener('click', () => {
+  const d = document.createElement('div'); d.className = 'xgig';
+  d.innerHTML = '<p class="xh"><span class="xn"></span><button type="button" class="xrm" aria-label="Remove this gig">✕</button></p>' +
+    '<p class="sm" style="margin:0">FaceTime or In Real Life?</p>' +
+    '<div class="fmts" role="group" aria-label="FaceTime or In Real Life"><button type="button" class="fmt xft" aria-pressed="false">FaceTime</button><button type="button" class="fmt xirl" aria-pressed="false">In Real Life</button></div>' +
+    '<label>Name your gig</label><input type="text" class="xname" maxlength="120" placeholder="e.g. teach me mahjong" autocomplete="off">' +
+    '<label>Your price</label><div class="price-wrap" style="margin-top:-4px"><span>$</span><input type="text" class="xprice" inputmode="decimal" maxlength="7" placeholder="40" autocomplete="off"></div>';
+  moreGigs.appendChild(d); renumberGigs();
+  d.querySelector('.xft').focus({preventScroll:true}); d.scrollIntoView({behavior:'smooth', block:'center'});
+});
+moreGigs.addEventListener('click', e => {
+  const f = e.target.closest('.fmt'); if (f) { f.setAttribute('aria-pressed', f.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); if (msg.classList.contains('err')) say(''); return; }
+  const r = e.target.closest('.xrm'); if (r) { r.closest('.xgig').remove(); renumberGigs(); }
+});
+moreGigs.addEventListener('input', e => {
+  if (!e.target.classList.contains('xprice')) return;
+  let v = e.target.value.replace(/[^\d.]/g,''); const i = v.indexOf('.');
+  if (i > -1) v = v.slice(0,i+1) + v.slice(i+1).replace(/\./g,'').slice(0,2);
+  e.target.value = v;
+});
+// read the extra gig blocks; returns {gigs, error}
+function readExtraGigs(){
+  const gigs = [];
+  for (const [i,b] of [...moreGigs.querySelectorAll('.xgig')].entries()) {
+    const ft = b.querySelector('.xft').getAttribute('aria-pressed') === 'true', irl = b.querySelector('.xirl').getAttribute('aria-pressed') === 'true';
+    const name = b.querySelector('.xname').value.trim(), price = parseFloat(b.querySelector('.xprice').value);
+    const n = i + 2;
+    if (!ft && !irl) return { error: `Gig ${n}: FaceTime or In Real Life? Pick one — or both.`, el: b.querySelector('.xft') };
+    if (!name) return { error: `Gig ${n}: name your gig.`, el: b.querySelector('.xname') };
+    if (!(price > 0) || price > 10000) return { error: `Gig ${n}: add what you'd pay ($1–$10,000).`, el: b.querySelector('.xprice') };
+    gigs.push({ gig_name: name, gig_price: Math.round(price * 100) / 100, gig_format: ft && irl ? 'both' : (ft ? 'facetime' : 'irl') });
+  }
+  return { gigs };
+}
+
 // "+ ADD ANOTHER GIG" → bring the form back (email, city, 18+ stay filled) with a clean gig box
 $('addAnother').addEventListener('click', () => {
   $('done').classList.remove('show');
@@ -817,7 +869,7 @@ $('addAnother').addEventListener('click', () => {
   form.style.display = '';
   $('createGigs').setAttribute('aria-pressed','true'); syncGigPanel(true);
   ['fmtFacetime','fmtIrl'].forEach(id => $(id).setAttribute('aria-pressed','false'));
-  $('gigName').value = ''; $('gigPrice').value = '';
+  $('gigName').value = ''; $('gigPrice').value = ''; moreGigs.innerHTML = ''; renumberGigs();
   btn.disabled = false; btn.textContent = 'ADD GIG'; say('');
   form.scrollIntoView({ behavior:'smooth', block:'start' });
   setTimeout(() => $('fmtFacetime').focus({preventScroll:true}), 500);
