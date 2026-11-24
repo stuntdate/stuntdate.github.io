@@ -17,5 +17,5 @@ STUNTDATE is currently a beta trial. People sign up, post and take gigs, and pay
 - How it works: 1) A person creates a gig and sets the price. 2) A Stuntdate goes for the gig, does it, and gets paid the same day.
 - Humans only: no bots take gigs and no AI does the work
 - Adults only: 18+ during the beta
-- Contact: julie@stuntdate.com
+- Contact: stuntdate@gmail.com
 - Instagram: https://www.instagram.com/stuntdate/
