@@ -206,6 +206,8 @@
   .cardbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:360px}
   .cardbtns .postyours{font-size:20px;padding:14px 8px}
   .seegigs{display:block;width:100%;max-width:360px;margin-top:10px;padding:16px;background:var(--red);color:#F5EEDC;font-family:var(--display);font-size:22px;text-align:center;text-decoration:none;letter-spacing:.02em}
+  .addmore{max-width:360px;margin-top:10px;background:transparent;color:#F5EEDC;border:2px solid #F5EEDC}
+  .addmore:hover{background:var(--red);border-color:var(--red)}
   .seegigs:hover{background:#F5EEDC;color:#000}
   @keyframes draw{to{stroke-dashoffset:0}}
   .adult a{color:#F5EEDC;text-decoration:underline}
@@ -291,6 +293,7 @@
       <button type="button" class="postyours" id="saveCard">Save it</button>
       <button type="button" class="postyours" id="sendCard">Send it →</button>
     </div>
+    <button type="button" class="postyours addmore" id="addAnother">+ ADD ANOTHER GIG</button>
     <a class="seegigs" href="/gigs">SEE THE GIGS →</a>
   </section>
   <section class="faq">
@@ -444,20 +447,30 @@ form.addEventListener('submit', async e => {
 
   try {
     const base = { email, city: city || null, create_gigs, take_gigs, gig_name, gig_price, gig_format, source: location.hostname || 'local' };
-    const send = body => fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, { method:'POST', headers, body: JSON.stringify(body) });
     const email_me_gigs = $('emailMe').checked;
     const withCols = { ...base, show_gig, is_18: true, card_line: card[1] };
-    let res = await send({ ...withCols, email_me_gigs });
-    // safety net: if newer columns aren't in Supabase yet, save the signup without them
-    if (res.status === 400) { const t = await res.clone().text(); if (/email_me_gigs/i.test(t)) res = await send(withCols); }
-    if (res.status === 400) { const t = await res.clone().text(); if (/show_gig|is_18|card_line|column/i.test(t)) res = await send(base); }
-    if (res.ok || res.status === 409) {                 // 409 = already on the list
-      // their gig idea also goes to the Gig Board as "waiting for approval" (J approves or rejects it by email)
-      if (res.ok && create_gigs) postSignupGig({ gig_name, gig_price, gig_format, city, email });
+    let ok = false, isNew = false, res = null;
+    // 1) main way: one call that adds a new person OR adds to an existing person's entry
+    try {
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/join_beta`, { method:'POST', headers, body: JSON.stringify({ p: { ...withCols, email_me_gigs } }) });
+      if (r.ok) { const j = await r.json().catch(() => ({})); ok = true; isNew = !(j && j.status === 'existing'); }
+    } catch(e){}
+    // 2) fallback (old way): plain insert, in case the call above is ever unavailable
+    if (!ok) {
+      const send = body => fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, { method:'POST', headers, body: JSON.stringify(body) });
+      res = await send({ ...withCols, email_me_gigs });
+      if (res.status === 400) { const t = await res.clone().text(); if (/email_me_gigs/i.test(t)) res = await send(withCols); }
+      if (res.status === 400) { const t = await res.clone().text(); if (/show_gig|is_18|card_line|column/i.test(t)) res = await send(base); }
+      ok = res.ok || res.status === 409; isNew = res.ok;
+    }
+    if (ok) {
+      // their gig idea also goes to the Gig Board as "waiting for approval" (J approves or rejects it by email) — new or returning
+      if (create_gigs) postSignupGig({ gig_name, gig_price, gig_format, city, email });
       form.style.display = 'none';
       document.body.classList.add('joined');
-      if (res.status === 409) $('done').querySelector('.done-h').textContent = "You're already in.";
-      showCard(card, { city, create_gigs, take_gigs, isNew: res.ok });
+      $('done').querySelector('.done-h').textContent = !isNew ? (create_gigs ? "Gig added." : "You're in. Added.") : "You're in.";
+      $('done').querySelector('.done-p').textContent = (!isNew && create_gigs) ? "Add as many as you want." : "We'll reach out when the beta drops.";
+      showCard(card, { city, create_gigs, take_gigs, isNew });
       $('done').classList.add('show');
       $('done').scrollIntoView({ behavior:'smooth', block:'center' });
     } else {
@@ -795,6 +808,20 @@ function logShare(g, place){
       body: JSON.stringify({ gig: g ? g[0] : null, gig_price: g ? g[1] : null, place }) }).catch(()=>{});
   } catch(e){}
 }
+
+// "+ ADD ANOTHER GIG" → bring the form back (email, city, 18+ stay filled) with a clean gig box
+$('addAnother').addEventListener('click', () => {
+  $('done').classList.remove('show');
+  document.body.classList.remove('joined');
+  document.body.classList.add('addingmore');
+  form.style.display = '';
+  $('createGigs').setAttribute('aria-pressed','true'); syncGigPanel(true);
+  ['fmtFacetime','fmtIrl'].forEach(id => $(id).setAttribute('aria-pressed','false'));
+  $('gigName').value = ''; $('gigPrice').value = '';
+  btn.disabled = false; btn.textContent = 'ADD GIG'; say('');
+  form.scrollIntoView({ behavior:'smooth', block:'start' });
+  setTimeout(() => $('fmtFacetime').focus({preventScroll:true}), 500);
+});
 
 // "Post yours" → jump to the form with "I'll create gigs" picked
 document.getElementById('postYours').onclick=()=>{

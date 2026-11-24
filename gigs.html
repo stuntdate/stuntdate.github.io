@@ -140,16 +140,17 @@
     <div class="formwrap">
       <h2>I'll do it.</h2>
       <div class="gigq" id="takeGig"></div>
-      <form data-ok="takeOk" id="takeForm">
-        <label>Your name or nickname<input type="text" placeholder="e.g. Maya"></label>
-        <label>Best way to reach you<input type="text" placeholder="phone, @instagram or email"></label>
-        <label>Anything they should know? (optional)<textarea placeholder="e.g. I play mahjong every Sunday with my grandma"></textarea></label>
-        <label class="chk"><input type="checkbox"> I'm 18 or older.</label>
-        <button class="send" type="submit">SEND</button>
+      <form id="takeForm">
+        <label>Your name or nickname<input type="text" id="tName" maxlength="100" placeholder="e.g. Maya"></label>
+        <label>Best way to reach you<input type="text" id="tContact" maxlength="200" placeholder="phone, @instagram or email"></label>
+        <label>Anything they should know? (optional)<textarea id="tNote" maxlength="1000" placeholder="e.g. I play mahjong every Sunday with my grandma"></textarea></label>
+        <label class="chk"><input type="checkbox" id="t18"> I'm 18 or older.</label>
+        <p class="err" id="tErr"></p>
+        <button class="send" type="submit" id="tSend">SEND</button>
         <p class="fine">Your contact is never shown on the board. If you get the gig, you'll both hear from us: <b>Gig's booked.</b></p>
       </form>
     </div>
-    <div class="ok" id="takeOk" hidden><h3>Almost.</h3><p>Taking gigs opens when the trial starts.<br>We'll reach out.</p></div>
+    <div class="ok" id="takeOk" hidden><h3>Got it.</h3><p>We'll reach out about this gig.<br>Want more? Do as many as you like.</p><button type="button" class="post" id="takeAnother" style="margin-top:18px;width:100%">PICK ANOTHER GIG +</button></div>
   </div>
 </div>
 
@@ -244,7 +245,7 @@ const $=id=>document.getElementById(id);
 const esc=t=>String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const tagName=f=>f==='ft'?'FaceTime':'In Real Life';
 const PATH='M24 7 C140 1, 290 3, 391 9 C398 44, 397 92, 390 121 C280 128, 120 127, 9 122 C3 90, 5 44, 11 10 C70 3, 150 1, 214 6';
-const board=$('board'); let filter='all', GIGS=[];
+const board=$('board'); let filter='all', GIGS=[], TAKING=null;
 
 async function load(){
   try{ const r=await fetch(SUPABASE_URL+'/rest/v1/rpc/board_gigs',{method:'POST',headers:H,body:'{}'}); GIGS=r.ok?await r.json():[]; }catch(e){ GIGS=[]; }
@@ -291,7 +292,7 @@ board.addEventListener('click',e=>{
   const ad=e.target.closest('.ad'); if(!ad||ad.classList.contains('booked')) return;
   if(e.target.closest('.doit')){ const g=GIGS[ad.dataset.i];
     $('takeGig').innerHTML=`<span class="gt ${g.format}">${tagName(g.format)}</span><p style="margin:8px 0">${esc(g.gig)}</p><span class="price">${esc(g.price)}</span> · ${esc(g.city||'Anywhere')} · ${esc(g.when_text||'')}`;
-    open('takeSheet'); return; }
+    TAKING=g; $('tErr').textContent=''; open('takeSheet'); return; }
   const was=ad.classList.contains('on');
   board.querySelectorAll('.ad.on').forEach(a=>a.classList.remove('on'));
   if(!was){ void ad.offsetWidth; ad.classList.add('on'); }
@@ -305,6 +306,26 @@ document.querySelectorAll('.sheet').forEach(s=>s.addEventListener('click',e=>{if
 document.querySelectorAll('.pick').forEach(p=>p.querySelectorAll('button').forEach(b=>b.onclick=()=>p.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b))));
 // forms not connected yet (I'll do it, Gig done, Thoughts): show their thank-you only
 document.querySelectorAll('.sheet form[data-ok]').forEach(f=>f.addEventListener('submit',e=>{e.preventDefault();f.closest('.formwrap').hidden=true;$(f.dataset.ok).hidden=false;}));
+
+// I'LL DO IT → saved + emailed to J. Anyone can do as many gigs as they want.
+$('takeAnother').onclick=closeAll;
+$('takeForm').addEventListener('submit',async e=>{
+  e.preventDefault(); const err=$('tErr'); err.textContent='';
+  const name=$('tName').value.trim(), contact=$('tContact').value.trim(), note=$('tNote').value.trim();
+  if(!TAKING) return err.textContent='Pick a gig first.';
+  if(contact.length<3) return err.textContent='How can we reach you?';
+  if(!$('t18').checked) return err.textContent='The trial is 18+. Tick the box to confirm.';
+  const btn=$('tSend'); btn.disabled=true; btn.textContent='SENDING…';
+  try{
+    const r=await fetch(SUPABASE_URL+'/rest/v1/gig_takes',{method:'POST',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify({
+      gig_id:TAKING.id||null, gig_text:String(TAKING.gig||'').slice(0,500), gig_price:String(TAKING.price||'').slice(0,60),
+      name:name||null, contact, note:note||null, is_18:true})});
+    if(!r.ok) throw new Error(r.status+' '+await r.text());
+    $('takeForm').closest('.formwrap').hidden=true; $('takeOk').hidden=false;
+    $('tNote').value='';   // name, contact and the 18+ box stay filled so the next gig takes 5 seconds
+  }catch(x){ console.error(x); err.textContent='Something broke. Try again in a sec.'; }
+  btn.disabled=false; btn.textContent='SEND';
+});
 
 // POST A GIG → saved as "waiting"; J approves from the email
 $('postForm').addEventListener('submit',async e=>{
