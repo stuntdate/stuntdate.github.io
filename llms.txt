@@ -1,0 +1,21 @@
+# STUNTDATE
+
+> STUNTDATE is a humans-only, 24-hour gig platform. Everyday people create out-of-the-ordinary gigs for one another, in real life or over FaceTime. A real human (a "Stuntdate", your wingman) does the gig and gets paid the same day. It is a gig site, not a dating site. AI works behind the scenes and never takes a gig.
+
+STUNTDATE is currently a beta trial. People sign up, post and take gigs, and pay each other directly with whatever payment app they use. Founder: Julie Daniels Janklow.
+
+## Pages
+- [Home](https://stuntdate.com/): what STUNTDATE is, how it works, FAQ, and the beta sign-up
+- [About](https://stuntdate.com/about): why humans only, and who is behind it
+- [Real gigs](https://stuntdate.com/real-gigs): 46 real gigs from real people, past requests that show the kind of thing people post
+- [Privacy](https://stuntdate.com/privacy)
+- [Terms](https://stuntdate.com/terms)
+
+## Key facts
+- Tagline: "You're the gig." and "IRL & FaceTime for bed rotters"
+- Motto: "Human first, educated at birth. The world is not our algorithm."
+- How it works: 1) A person creates a gig and sets the price. 2) A Stuntdate goes for the gig, does it, and gets paid the same day.
+- Humans only: no bots take gigs and no AI does the work
+- Adults only: 18+ during the beta
+- Contact: julie@stuntdate.com
+- Instagram: https://www.instagram.com/stuntdate/

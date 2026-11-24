@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>STUNTDATE — You're the gig. Paid IRL &amp; FaceTime Gigs</title>
-<meta name="description" content="You're the gig. Out-of-the-ordinary paid gigs, posted by people like you — IRL &amp; FaceTime. Same-day payment after the gig is finished. Humans only — AI don't apply. Get on the beta list.">
+<meta name="description" content="Out-of-the-ordinary gigs, created by people like you — IRL &amp; FaceTime. A real human does the gig and gets paid same day. Humans only. AI don't apply.">
 <link rel="canonical" href="https://stuntdate.com/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 
@@ -13,14 +13,14 @@
 <meta property="og:site_name" content="STUNTDATE">
 <meta property="og:url" content="https://stuntdate.com/">
 <meta property="og:title" content="STUNTDATE — You're the gig.">
-<meta property="og:description" content="Out-of-the-ordinary paid gigs, posted by people like you — IRL &amp; FaceTime. Same-day payment. Humans only — AI don't apply.">
+<meta property="og:description" content="Out-of-the-ordinary gigs, created by people like you — IRL &amp; FaceTime. Paid same day. Humans only. AI don't apply.">
 <meta property="og:image" content="https://stuntdate.com/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="STUNTDATE in a red hand-drawn circle. You're the gig. Humans only. AI don't apply.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="STUNTDATE — You're the gig.">
-<meta name="twitter:description" content="Out-of-the-ordinary paid gigs, posted by people like you — IRL &amp; FaceTime. Same-day payment. Humans only — AI don't apply.">
+<meta name="twitter:description" content="Out-of-the-ordinary gigs, created by people like you — IRL &amp; FaceTime. Paid same day. Humans only. AI don't apply.">
 <meta name="twitter:image" content="https://stuntdate.com/og.png">
 
 <!-- icons -->
@@ -270,6 +270,7 @@
       <label class="okshow"><input type="checkbox" id="showGig" checked> OK to show my gig on Stuntdate (no name, just my gig &amp; price)</label>
     </div>
     <label class="adult"><input type="checkbox" id="is18"> <span>I'm 18 or older and agree to the <a href="/terms" target="_blank">Terms</a>.</span></label>
+    <label class="adult"><input type="checkbox" id="emailMe"> <span>Email me the latest gigs (weekly&nbsp;at&nbsp;most).</span></label>
     <div class="hp" aria-hidden="true"><label>Leave empty <input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>
     <button type="submit" class="add" id="addBtn">ADD ME</button>
     <p class="msg" id="msg" role="status" aria-live="polite"></p>
@@ -306,7 +307,7 @@
   <nav class="more" aria-label="More about STUNTDATE">
     <a href="/about">Why humans only →</a>
   </nav>
-  <footer><a href="https://stuntdate.com/">stuntdate.com</a> · <a href="/about">about</a> · <a href="https://www.instagram.com/stuntdate/" rel="me noopener" target="_blank">instagram</a> · <a href="/privacy">privacy</a> · <a href="/terms">terms</a></footer>
+  <footer><a href="https://stuntdate.com/">stuntdate.com</a> · <a href="/about">about</a> · <a href="/real-gigs">real gigs</a> · <a href="https://www.instagram.com/stuntdate/" rel="me noopener" target="_blank">instagram</a> · <a href="/privacy">privacy</a> · <a href="/terms">terms</a></footer>
 </main>
 <div class="vbox" id="vbox" role="dialog" aria-modal="true" aria-label="Stuntdate video" hidden>
   <button type="button" class="vclose" id="vclose" aria-label="Close video">✕</button>
@@ -444,8 +445,11 @@ form.addEventListener('submit', async e => {
   try {
     const base = { email, city: city || null, create_gigs, take_gigs, gig_name, gig_price, gig_format, source: location.hostname || 'local' };
     const send = body => fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, { method:'POST', headers, body: JSON.stringify(body) });
-    let res = await send({ ...base, show_gig, is_18: true, card_line: card[1] });
-    // safety net: if the two new columns aren't in Supabase yet, save the signup without them
+    const email_me_gigs = $('emailMe').checked;
+    const withCols = { ...base, show_gig, is_18: true, card_line: card[1] };
+    let res = await send({ ...withCols, email_me_gigs });
+    // safety net: if newer columns aren't in Supabase yet, save the signup without them
+    if (res.status === 400) { const t = await res.clone().text(); if (/email_me_gigs/i.test(t)) res = await send(withCols); }
     if (res.status === 400) { const t = await res.clone().text(); if (/show_gig|is_18|card_line|column/i.test(t)) res = await send(base); }
     if (res.ok || res.status === 409) {                 // 409 = already on the list
       // their gig idea also goes to the Gig Board as "waiting for approval" (J approves or rejects it by email)
