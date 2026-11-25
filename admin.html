@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stuntdate Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#000000">
+<style>
+@font-face{font-family:'Archivo';src:url('/archivo-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Archivo';src:url('/archivo-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Archivo';src:url('/archivo-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Anton';src:url('/anton.woff2') format('woff2');font-display:swap}
+:root{
+  --bg:#000000; --fg:#F5EEDC; --red:#ff1f2d;
+  --display:'Anton','Impact','Arial Narrow',sans-serif;
+  --body:'Archivo','Helvetica Neue',Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:18px;line-height:1.4;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+main{max-width:640px;margin:0 auto}
+.logo{display:inline-block;font-family:var(--display);font-size:34px;letter-spacing:.02em;padding:6px 22px 8px;border:4px solid var(--red);border-radius:50%;margin:0 0 22px}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(40px,11vw,64px);line-height:1;margin:0 0 6px;text-wrap:balance}
+.sub{margin:0 0 22px;font-weight:600}
+.grid{display:grid;gap:14px}
+.btn{display:block;width:100%;text-align:left;font:inherit;text-decoration:none;color:var(--fg);background:var(--bg);border:3px solid var(--fg);padding:16px 18px 14px;min-width:0;cursor:pointer}
+.btn:hover,.btn:focus-visible{background:var(--fg);color:var(--bg);outline:none}
+.btn:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+.name{display:block;font-family:var(--display);font-size:clamp(30px,8.5vw,40px);line-height:1.05;letter-spacing:.01em}
+.what{display:block;font-weight:600;margin-top:4px}
+.btn.main{background:var(--red);border-color:var(--red)}
+.btn.main:hover,.btn.main:focus-visible{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+.rule{margin:30px 0 0;font-weight:700;border-top:3px solid var(--red);padding-top:14px}
+.back{display:block;width:fit-content;padding:10px 16px 8px;margin:0 0 20px}
+.back .name{font-size:24px}
+.tabs{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px}
+.tab{font:inherit;background:var(--bg);color:var(--fg);border:3px solid var(--fg);padding:10px 14px 8px;cursor:pointer;font-family:var(--display);font-size:22px;letter-spacing:.02em}
+.tab[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.tab:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+.card{border:3px solid var(--fg);padding:16px 18px;margin:0 0 14px;min-width:0}
+.tag{display:inline-block;font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px 3px;border:2px solid var(--fg)}
+.tag.ft{background:var(--red);border-color:var(--red)}
+.cardtop{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.where{font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:14px}
+.gig{margin:12px 0 8px;font-size:20px;font-weight:600;overflow-wrap:anywhere}
+.price{font-family:var(--display);color:var(--red);font-size:36px;line-height:1}
+.meta{font-size:15px;font-weight:600;margin:8px 0 0;overflow-wrap:anywhere}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.act{font:inherit;font-family:var(--display);font-size:28px;letter-spacing:.02em;padding:12px 8px 8px;cursor:pointer;color:var(--fg);border:3px solid var(--fg);background:var(--bg)}
+.act.yes{background:var(--red);border-color:var(--red)}
+.act:focus-visible{outline:3px solid var(--fg);outline-offset:3px}
+.done{font-family:var(--display);font-size:30px;margin-top:14px;letter-spacing:.02em}
+.done.ok{color:var(--red)}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:20px}
+.pg{font:inherit;font-family:var(--display);font-size:24px;letter-spacing:.02em;padding:10px 14px 8px;border:3px solid var(--fg);background:var(--bg);color:var(--fg);cursor:pointer}
+.pg[disabled]{opacity:.35;cursor:default}
+.pg:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+.pgno{font-weight:700;text-align:center}
+.empty{border:3px solid var(--fg);padding:22px 18px;font-family:var(--display);font-size:30px}
+.count{font-family:var(--display);font-size:56px;line-height:1;color:var(--red)}
+.link{display:block;margin-top:18px}
+label{display:block;font-family:var(--display);font-size:24px;letter-spacing:.02em;margin:0 0 6px}
+input{display:block;width:100%;font:inherit;font-size:20px;font-weight:600;color:var(--fg);background:var(--bg);border:3px solid var(--fg);border-radius:0;padding:14px 14px 12px;margin:0 0 18px}
+input:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+.err{border:3px solid var(--red);padding:12px 14px;margin:0 0 18px;font-weight:700}
+.small{margin-top:26px}
+.small .btn{padding:10px 16px 8px}
+.small .name{font-size:22px}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+const SUPABASE_URL='https://uteudsgyzjbqqupprvbh.supabase.co';
+const SUPABASE_KEY='sb_publishable_67qWv22s-hW7gmldtJUCNg_Negs__jA';
+const PER=3;
+const app=document.getElementById('app');
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const st={view:'home',tab:'waiting',filter:'all',page:{waiting:0,live:0,declined:0,signups:0,board:0},note:{},counts:{waiting:0,live:0,declined:0},msg:''};
+let TOKEN='';
+try{TOKEN=sessionStorage.getItem('sd_admin')||''}catch(e){}
+
+async function rpc(name,body){
+  const r=await fetch(SUPABASE_URL+'/rest/v1/rpc/'+name,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},body:JSON.stringify(body)});
+  if(!r.ok)throw new Error('http '+r.status);
+  return r.json();
+}
+function setToken(t){TOKEN=t||'';try{if(t)sessionStorage.setItem('sd_admin',t);else sessionStorage.removeItem('sd_admin')}catch(e){}}
+function expired(){setToken('');st.msg='Signed out. Log in again.';login()}
+
+function head(h,s){const f=document.createDocumentFragment();f.append(el('div','logo','STUNTDATE'),el('h1',null,h));if(s)f.append(el('p','sub',s));return f}
+function backBtn(){const b=el('button','btn back');b.append(el('span','name','← HOME BASE'));b.onclick=()=>go('home');return b}
+function go(v){st.view=v;location.hash=v==='home'?'':v;render();window.scrollTo(0,0)}
+
+function login(){
+  app.replaceChildren(head('Log in.'));
+  if(st.msg){app.append(el('div','err',st.msg));st.msg=''}
+  const f=el('form');f.autocomplete='on';
+  const l1=el('label',null,'USERNAME');l1.htmlFor='u';
+  const u=el('input');u.id='u';u.name='username';u.type='text';u.autocomplete='username';u.autocapitalize='none';u.spellcheck=false;u.required=true;
+  const l2=el('label',null,'PASSWORD');l2.htmlFor='p';
+  const p=el('input');p.id='p';p.name='password';p.type='password';p.autocomplete='current-password';p.required=true;
+  const b=el('button','btn main');b.type='submit';b.append(el('span','name','LOG IN'));
+  f.append(l1,u,l2,p,b);
+  f.onsubmit=async e=>{
+    e.preventDefault();b.disabled=true;
+    try{
+      const t=await rpc('admin_login',{p_user:u.value.trim(),p_pass:p.value});
+      p.value='';
+      if(t){setToken(t);st.msg='';render();return}
+      st.msg='That did not work. Try again in a minute.';login();
+    }catch(x){st.msg='That did not work. Try again in a minute.';login()}
+  };
+  app.append(f);u.focus();
+}
+function home(){
+  app.replaceChildren(head('Pick one thing.','Tap a button. It opens right here. When you are done, tap HOME BASE.'));
+  const g=el('div','grid');
+  const sec=(v,n,w,main)=>{const b=el('button','btn'+(main?' main':''));b.append(el('span','name',n),el('span','what',w));b.onclick=()=>go(v);return b};
+  const out=(n,w,h)=>{const a=el('a','btn');a.href=h;a.target='_blank';a.rel='noopener noreferrer';a.append(el('span','name',n),el('span','what',w));return a};
+  g.append(
+    sec('gig-board','GIG BOARD','See the live Gig Board',true),
+    sec('inbox','INBOX','Gigs waiting for your OK: approve or decline'),
+    sec('signups','SIGNUPS AND GIGS','See who signed up and which gigs exist'),
+    out('WEBSITE','See the homepage','https://stuntdate.com'),
+    out('EMAIL SETUP','Check stuntdate.com is verified','https://resend.com/domains'),
+    out('DOMAIN','Domain settings. Look only.','https://dcc.godaddy.com/control/portfolio/stuntdate.com/settings?tab=dns'),
+    out('SITE FILES','Where the site lives. Look only.','https://github.com/stuntdate/stuntdate.github.io')
+  );
+  const s=el('div','small');const lo=el('button','btn');lo.append(el('span','name','LOG OUT'));
+  lo.onclick=async()=>{const t=TOKEN;setToken('');try{await rpc('admin_logout',{p_session:t})}catch(e){}st.msg='Logged out.';location.hash='';login()};
+  s.append(lo);
+  app.append(g,el('p','rule','One thing open at a time.'),s);
+}
+function pager(key,total,off){
+  const pages=Math.max(1,Math.ceil(total/PER));const p=st.page[key];
+  const w=el('div','pager');
+  const a=el('button','pg','← BACK');a.disabled=p<=0;a.onclick=()=>{st.page[key]--;render()};
+  const m=el('div','pgno','PAGE '+(p+1)+' OF '+pages);
+  const n=el('button','pg','NEXT →');n.disabled=p>=pages-1;n.onclick=()=>{st.page[key]++;render()};
+  w.append(a,m,n);return w;
+}
+function gigCard(g,actions){
+  const c=el('div','card');const t=el('div','cardtop');
+  t.append(el('span','tag '+g.format,g.format==='ft'?'FaceTime':'In Real Life'),el('span','where',g.city||''));
+  c.append(t,el('p','gig',g.gig),el('span','price',g.price),el('p','meta','When: '+(g.when_text||'Anytime')+'  ·  Created by: '+(g.contact||'')));
+  if(actions){
+    if(st.note[g.id]){c.append(el('div','done '+(st.note[g.id]==='APPROVED.'?'ok':''),st.note[g.id]))}
+    else{const a=el('div','acts');const y=el('button','act yes','APPROVE');const n=el('button','act','DECLINE');
+      y.onclick=()=>decide(g,true);n.onclick=()=>decide(g,false);a.append(y,n);c.append(a)}
+  }
+  return c;
+}
+async function decide(g,yes){
+  st.note[g.id]=yes?'APPROVED.':'DECLINED.';render();
+  try{
+    const ok=await rpc('admin_decide',{p_session:TOKEN,p_id:g.id,p_approve:yes});
+    if(!ok){/* already handled elsewhere: just refresh */}
+  }catch(e){delete st.note[g.id];st.msg='Something broke. Nothing was changed. Try again.';render();return}
+  setTimeout(()=>{delete st.note[g.id];render()},900);
+}
+async function getGigs(group,off,lim){
+  const d=await rpc('admin_gigs',{p_session:TOKEN,p_group:group,p_off:off,p_lim:lim});
+  if(!d){expired();return null}
+  st.counts=d.counts;return d;
+}
+function loading(h,s){app.replaceChildren(backBtn(),head(h,s),el('div','empty','One moment.'))}
+async function inbox(){
+  const mine=++seq;loading('INBOX','stuntdate@gmail.com');
+  let d;try{d=await getGigs(st.tab,st.page[st.tab]*PER,PER)}catch(e){if(mine!==seq)return;return fail()}
+  if(!d||mine!==seq)return;
+  const pages=Math.max(1,Math.ceil(d.total/PER));
+  if(st.page[st.tab]>=pages&&st.page[st.tab]>0){st.page[st.tab]=pages-1;return inbox()}
+  app.replaceChildren(backBtn(),head('INBOX','stuntdate@gmail.com'));
+  if(st.msg){app.append(el('div','err',st.msg));st.msg=''}
+  const tabs=el('div','tabs');
+  [['waiting','WAITING'],['live','LIVE'],['declined','DECLINED']].forEach(([k,l])=>{
+    const b=el('button','tab',l+' '+d.counts[k]);b.setAttribute('aria-pressed',st.tab===k);b.onclick=()=>{st.tab=k;render()};tabs.append(b)});
+  app.append(tabs);
+  if(!d.rows.length){app.append(el('div','empty',st.tab==='waiting'?'Nothing waiting.':'Nothing here yet.'));return}
+  d.rows.forEach(g=>app.append(gigCard(g,st.tab==='waiting')));
+  app.append(pager(st.tab,d.total));
+}
+let seq=0;
+function fail(){app.replaceChildren(backBtn(),head('Oops.','Could not load. Tap HOME BASE and try again.'))}
+async function board(){
+  const mine=++seq;loading('GIG BOARD','Gigs created by humans, for humans.');
+  let d;try{d=await getGigs('live',0,50)}catch(e){if(mine!==seq)return;return fail()}
+  if(!d||mine!==seq)return;
+  app.replaceChildren(backBtn(),head('GIG BOARD','Gigs created by humans, for humans.'));
+  const tabs=el('div','tabs');
+  [['all','All'],['ft','FaceTime'],['irl','In Real Life']].forEach(([k,l])=>{
+    const b=el('button','tab',l);b.setAttribute('aria-pressed',st.filter===k);b.onclick=()=>{st.filter=k;st.page.board=0;render()};tabs.append(b)});
+  app.append(tabs);
+  const list=d.rows.filter(g=>st.filter==='all'||g.format===st.filter);
+  if(!list.length){app.append(el('div','empty','No gigs here.'))}
+  else{const pages=Math.max(1,Math.ceil(list.length/PER));if(st.page.board>=pages)st.page.board=pages-1;const p=st.page.board;
+    list.slice(p*PER,p*PER+PER).forEach(g=>app.append(gigCard(g,false)));app.append(pager('board',list.length))}
+  const a=el('a','btn link');a.href='https://stuntdate.com/gigs';a.target='_blank';a.rel='noopener noreferrer';a.append(el('span','name','OPEN THE REAL BOARD →'));app.append(a);
+}
+async function signupsView(){
+  const mine=++seq;loading('SIGNUPS AND GIGS','Everyone who signed up.');
+  let d;try{d=await rpc('admin_signups',{p_session:TOKEN,p_off:st.page.signups*PER,p_lim:PER})}catch(e){if(mine!==seq)return;return fail()}
+  if(mine!==seq)return;
+  if(!d){expired();return}
+  app.replaceChildren(backBtn(),head('SIGNUPS AND GIGS','Everyone who signed up.'));
+  const c=el('div','card');c.append(el('span','count',String(d.total)),el('p','meta','people signed up  ·  '+d.gigs+' gigs created'));app.append(c);
+  d.rows.forEach(s=>{const x=el('div','card');const t=el('div','cardtop');
+    const wants=s.create_gigs&&s.take_gigs?'both':s.create_gigs?'create':s.take_gigs?'take':'not said';
+    let dt='';try{dt=new Date(s.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'})}catch(e){}
+    t.append(el('span','tag','#'+String(s.id).padStart(4,'0')),el('span','where',s.city||''));
+    x.append(t,el('p','gig',s.email),el('p','meta','Wants to: '+wants+'  ·  Joined '+dt));app.append(x)});
+  app.append(pager('signups',d.total));
+}
+function render(){
+  if(!TOKEN){login();return}
+  const v=st.view;
+  if(v==='inbox')inbox();else if(v==='gig-board')board();else if(v==='signups')signupsView();else home();
+}
+function fromHash(){const h=location.hash.replace('#','');st.view=['inbox','gig-board','signups'].includes(h)?h:'home';render()}
+window.addEventListener('hashchange',fromHash);
+fromHash();
+</script>
+</body>
+</html>
