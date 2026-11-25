@@ -5,19 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Gig Board — STUNTDATE</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Real gigs real people asked for. Do one, or post your own. IRL &amp; FaceTime. Humans only.">
+<meta name="description" content="Real gigs real people asked for. Do one, or create your own. IRL &amp; FaceTime. Humans only.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="STUNTDATE">
 <meta property="og:url" content="https://stuntdate.com/gigs.html">
 <meta property="og:title" content="Gig Board — STUNTDATE">
-<meta property="og:description" content="Real gigs real people asked for. Do one, or post your own. IRL &amp; FaceTime. Humans only. AI don't apply.">
+<meta property="og:description" content="Real gigs real people asked for. Do one, or create your own. IRL &amp; FaceTime. Humans only. AI don't apply.">
 <meta property="og:image" content="https://stuntdate.com/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="STUNTDATE in a red hand-drawn circle. You're the gig. Humans only. AI don't apply.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Gig Board — STUNTDATE">
-<meta name="twitter:description" content="Real gigs real people asked for. Do one, or post your own. IRL &amp; FaceTime. Humans only. AI don't apply.">
+<meta name="twitter:description" content="Real gigs real people asked for. Do one, or create your own. IRL &amp; FaceTime. Humans only. AI don't apply.">
 <meta name="twitter:image" content="https://stuntdate.com/og.png">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -127,7 +127,7 @@
 
   <div class="top">
     <a class="home" href="/"><svg viewBox="0 0 400 130" preserveAspectRatio="none" aria-hidden="true"><path d="M86 26 C150 6, 260 2, 330 14 C390 26, 412 58, 392 86 C366 118, 270 128, 180 126 C90 124, 18 108, 8 74 C0 44, 50 18, 130 8 C190 1, 245 2, 276 6"/></svg>STUNTDATE</a>
-    <button class="post" id="openPost">POST A GIG +</button>
+    <button class="post" id="openPost">CREATE A GIG +</button>
   </div>
 
   <h1>GIG BOARD</h1>
@@ -173,7 +173,7 @@
   <div class="panel">
     <button class="x" data-close aria-label="Close">✕</button>
     <div class="formwrap">
-      <h2>Post a gig.</h2>
+      <h2>Create a gig.</h2>
       <p class="lead">Name it. Name your price. We check every gig before it goes on the board.</p>
       <form id="postForm">
         <div><label>FaceTime or In Real Life?</label><div class="pick" id="pFmt"><button type="button" data-v="ft" aria-pressed="false">FaceTime</button><button type="button" data-v="irl" aria-pressed="false">In Real Life</button></div></div>
@@ -181,14 +181,14 @@
         <div class="two"><label>Price<input type="text" id="pPrice" maxlength="60" placeholder="$35"></label><label>City<input type="text" id="pCity" maxlength="80" placeholder="LA"></label></div>
         <label>When<input type="text" id="pWhen" maxlength="80" placeholder="e.g. Sat 7pm, or anytime"></label>
         <label>Best way to reach you<input type="text" id="pContact" maxlength="120" placeholder="phone, @instagram or email"></label>
-        <label class="chk"><input type="checkbox" id="p18"> I'm 18 or older and agree to the <a href="/terms" target="_blank">Terms</a>.</label>
+        <label class="chk"><input type="checkbox" id="p18"> I'm 18 or older and agree to the <a href="/terms" target="_blank" style="color:#F5EEDC">Terms</a>.</label>
         <p class="err" id="pErr"></p>
         <p class="deal">Stuntdates show up. Gig creators send payment after gig completion.</p>
         <button class="send" type="submit" id="pSend">SHAKE ON IT &amp; SEND</button>
         <p class="fine">Your contact is never shown on the board. Tip for FaceTime gigs: send a FaceTime link instead of your number.</p>
       </form>
     </div>
-    <div class="ok" id="postOk" hidden><h3>Deal.</h3><p>Once it's approved, it goes on the board.</p><button type="button" class="post" id="postAnother" style="margin-top:18px;width:100%">POST ANOTHER GIG +</button></div>
+    <div class="ok" id="postOk" hidden><h3>Deal.</h3><p>Once it's approved, it goes on the board.</p><button type="button" class="post" id="postAnother" style="margin-top:18px;width:100%">CREATE ANOTHER GIG +</button></div>
   </div>
 </div>
 
@@ -237,7 +237,7 @@ function render(){
       <div class="meta"><span class="price">${esc(g.price)}</span><span class="when">${esc(g.when_text||'')}</span></div>
       ${booked?'':'<button class="share" type="button">Know someone for this? Send it →</button>'}
       ${booked?'':'<button class="doit" type="button">I\'LL DO IT</button>'}
-    </article>`;}).join(''):'<p class="empty">No gigs here yet. Be the first: POST A GIG +</p>';
+    </article>`;}).join(''):'<p class="empty">No gigs here yet. Be the first: CREATE A GIG +</p>';
 }
 load();
 document.querySelectorAll('.filters button').forEach(b=>b.onclick=()=>{filter=b.dataset.f;document.querySelectorAll('.filters button').forEach(x=>x.setAttribute('aria-pressed',x===b));render();});
@@ -309,7 +309,7 @@ $('postForm').addEventListener('submit',async e=>{
   if(format==='irl'&&!city) return err.textContent='Which city?';
   if(contact.length<3) return err.textContent='How can we reach you?';
   if(!$('p18').checked) return err.textContent='The trial is 18+. Tick the box to confirm.';
-  const btn=$('pSend'); btn.disabled=true; btn.textContent='POSTING…';
+  const btn=$('pSend'); btn.disabled=true; btn.textContent='CREATING…';
   try{
     const r=await fetch(SUPABASE_URL+'/rest/v1/gigs',{method:'POST',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify({format,gig,price,city:city||null,when_text:when_text||null,contact,is_18:true})});
     if(!r.ok) throw new Error(r.status+' '+await r.text());
@@ -327,7 +327,7 @@ $('postForm').addEventListener('submit',async e=>{
     const r=await fetch(`${FN}?id=${encodeURIComponent(id)}&t=${encodeURIComponent(t)}`,{headers:{apikey:SUPABASE_KEY}});
     const g=await r.json(); if(!r.ok) throw new Error(g.error||r.status);
     $('rvGig').innerHTML=`<span class="gt ${g.format}">${tagName(g.format)}</span><p style="margin:8px 0">${esc(g.gig)}</p><span class="price">${esc(g.price)}</span> · ${esc(g.city||'Anywhere')} · ${esc(g.when_text||'')}`;
-    $('rvMeta').innerHTML=`Posted by: ${esc(g.contact)}<br>Status now: <b>${esc(g.status)}</b>`;
+    $('rvMeta').innerHTML=`Created by: ${esc(g.contact)}<br>Status now: <b>${esc(g.status)}</b>`;
   }catch(x){ $('rvErr').textContent='This approval link doesn\'t work. It may be old or already used.'; }
   const act=async action=>{
     $('rvErr').textContent='';
