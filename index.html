@@ -437,9 +437,9 @@ form.addEventListener('submit', async e => {
   const create_gigs = $('createGigs').getAttribute('aria-pressed') === 'true';
   const take_gigs   = $('takeGigs').getAttribute('aria-pressed') === 'true';
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { say('Need a real email.', true); $('email').focus(); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { say('Oops, enter your email.', true); $('email').focus(); return; }
   if (!create_gigs && !take_gigs) { say('Pick one — or both.', true); return; }
-  if (!$('is18').checked) { say('The beta is 18+. Tick the box to confirm.', true); $('is18').focus(); return; }
+  if (!$('is18').checked) { say('Tick the box.', true); $('is18').focus(); return; }
 
   let gig_name = null, gig_price = null, gig_format = null, show_gig = null;
   const card = nextCard();
@@ -450,15 +450,15 @@ form.addEventListener('submit', async e => {
     gig_format = ft && irl ? 'both' : (ft ? 'facetime' : 'irl');
     gig_name = $('gigName').value.trim();
     gig_price = parseFloat($('gigPrice').value);
-    if (!gig_name) { say('Name your gig.', true); $('gigName').focus(); return; }
-    if (!(gig_price > 0) || gig_price > 10000) { say('Add what you\'d pay ($1–$10,000).', true); $('gigPrice').focus(); return; }
+    if (!gig_name) { say('Create your gig.', true); $('gigName').focus(); return; }
+    if (!(gig_price >= 5)) { say('Set your price ($5 minimum).', true); $('gigPrice').focus(); return; }
     gig_price = Math.round(gig_price * 100) / 100;
     show_gig = $('showGig').checked;
   }
   let extras = [];
   if (create_gigs) { const x = readExtraGigs(); if (x.error) { say(x.error, true); x.el.focus(); return; } extras = x.gigs; }
 
-  btn.disabled = true; btn.textContent = 'ADDING…'; say('');
+  btn.disabled = true; btn.textContent = 'ONE SEC…'; say('');
 
   const headers = { 'Content-Type':'application/json', 'apikey':SUPABASE_KEY, 'Prefer':'return=minimal' };
   if (SUPABASE_KEY.startsWith('eyJ')) headers.Authorization = 'Bearer ' + SUPABASE_KEY; // legacy anon JWT
@@ -496,7 +496,7 @@ form.addEventListener('submit', async e => {
     }
   } catch (err) {
     console.error(err);
-    say('Something broke. Try again in a sec.', true);
+    say('Uh oh, something broke. Try again in a sec.', true);
     btn.disabled = false; btn.textContent = 'COME ON IN';
   }
 });
@@ -866,8 +866,8 @@ function readExtraGigs(){
     const name = b.querySelector('.xname').value.trim(), price = parseFloat(b.querySelector('.xprice').value);
     const n = i + 2;
     if (!ft && !irl) return { error: `Gig ${n}: FaceTime or In Real Life? Pick one — or both.`, el: b.querySelector('.xft') };
-    if (!name) return { error: `Gig ${n}: name your gig.`, el: b.querySelector('.xname') };
-    if (!(price > 0) || price > 10000) return { error: `Gig ${n}: add what you'd pay ($1–$10,000).`, el: b.querySelector('.xprice') };
+    if (!name) return { error: `Gig ${n}: create your gig.`, el: b.querySelector('.xname') };
+    if (!(price >= 5)) return { error: `Gig ${n}: set your price ($5 minimum).`, el: b.querySelector('.xprice') };
     gigs.push({ gig_name: name, gig_price: Math.round(price * 100) / 100, gig_format: ft && irl ? 'both' : (ft ? 'facetime' : 'irl') });
   }
   return { gigs };
