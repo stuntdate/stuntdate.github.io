@@ -63,7 +63,7 @@
 
 <section class="screen" id="s-done"><h1>Gig completed.</h1><div class="gigq" data-card></div>
   <label>How was it?</label><div class="row tight" id="rate"><button class="pick" data-v="good" aria-pressed="false">Good</button><button class="pick" data-v="not good" aria-pressed="false">Not good</button></div>
-  <label>Any thoughts on STUNTDATE? (optional)<textarea id="thoughts" maxlength="2000"></textarea></label><button class="big" id="fbSend">SEND</button></section>
+  <label>Any thoughts on STUNTDATE? (optional)<textarea id="thoughts" maxlength="2000"></textarea></label><label class="pick pic" style="display:flex;align-items:center;justify-content:center;margin-top:20px">ADD A PIC (OPTIONAL)<input type="file" accept="image/*" id="pic" style="display:none"></label><p class="line" style="margin:8px 0 0;font-size:15px">A screenshot of the payment, or a photo from the gig.</p><button class="big" id="fbSend">SEND</button></section>
 
 <section class="screen" id="s-thanks"><h1>Deal done.</h1><p class="line">Thank you.</p></section>
 
@@ -116,8 +116,19 @@ document.querySelectorAll('#rate .pick').forEach(b=>b.onclick=()=>{
 $('fbSend').onclick=()=>{
   const p=document.querySelector('#rate [aria-pressed="true"]');
   if(!p){$('rate').classList.add('need');$('rate').scrollIntoView({block:'center'});return}
-  guard([$('fbSend')],async()=>{await rpc('deal_feedback',{p_token:token,p_rating:p.dataset.v,p_thoughts:$('thoughts').value.trim()});show('s-thanks')});
+  guard([$('fbSend')],async()=>{
+    await rpc('deal_feedback',{p_token:token,p_rating:p.dataset.v,p_thoughts:$('thoughts').value.trim()});
+    const f=$('pic').files[0];
+    if(f){try{
+      const ext=(f.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,5)||'jpg';
+      const path=crypto.randomUUID()+'.'+ext;
+      const r=await fetch(SUPABASE_URL+'/storage/v1/object/gig-pics/'+path,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':f.type||'image/jpeg'},body:f});
+      if(r.ok) await rpc('deal_pic',{p_token:token,p_path:path});
+    }catch(e){}}
+    show('s-thanks');
+  });
 };
+$('pic').onchange=()=>{const f=$('pic').files[0];const l=$('pic').parentNode;l.firstChild.nodeValue=f?f.name.slice(0,28):'ADD A PIC (OPTIONAL)'};
 (async()=>{
   if(!/^[0-9a-f-]{36}$/i.test(token)) return show('s-bad');
   try{route(await rpc('deal_get',{p_token:token}))}catch(e){show('s-bad')}
