@@ -121,6 +121,14 @@
   .rv-reject{background:#000;color:#F5EEDC;border:3px solid #F5EEDC!important}
   .rv-meta{font-size:14px;line-height:1.6;margin-top:12px}
 </style>
+<script>
+/* The Gig Board is closed to visitors for now. Only the admin's device (and approval links) can open it. */
+(function(){
+  if(/[?&]review=/.test(location.search))return;
+  try{if(localStorage.getItem('sd_in')==='1')return}catch(e){}
+  location.replace('/');
+})();
+</script>
 </head>
 <body>
 <main>
