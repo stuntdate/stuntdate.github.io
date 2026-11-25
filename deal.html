@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gig — STUNTDATE</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#000000">
+<style>
+  @font-face{font-family:'Archivo';src:url('/archivo-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:'Archivo';src:url('/archivo-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+  @font-face{font-family:'Archivo';src:url('/archivo-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+  @font-face{font-family:'Anton';src:url('/anton.woff2') format('woff2');font-display:swap}
+  :root{--red:#ff1f2d;--display:'Anton',Impact,'Arial Narrow Bold',sans-serif;--mono:'Archivo',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#000;color:#F5EEDC}
+  body{font-family:var(--mono);font-weight:700;-webkit-font-smoothing:antialiased;padding:28px 16px 60px;display:flex;justify-content:center}
+  main{width:100%;max-width:520px}
+  .home{position:relative;display:inline-block;padding:8px 16px;color:#F5EEDC;text-decoration:none;font-family:var(--display);font-weight:400;font-size:24px}
+  .home svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+  .home path{fill:none;stroke:var(--red);stroke-width:2.5;stroke-linecap:round;vector-effect:non-scaling-stroke}
+  h1{font-family:var(--display);font-weight:400;font-size:clamp(44px,13vw,64px);line-height:.98;margin-top:28px}
+  .gigq{border:3px solid #F5EEDC;padding:12px;margin-top:18px;font-size:15px;line-height:1.45}
+  .gt{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 7px 2px;display:inline-block}
+  .gt.ft{background:var(--red);color:#F5EEDC;border:2px solid var(--red)}
+  .gt.irl{background:#000;color:#F5EEDC;border:2px solid #F5EEDC}
+  .price{font-family:var(--display);font-weight:400;font-size:24px;color:var(--red)}
+  label{font-size:15px;display:block;margin-top:20px}
+  select,textarea{width:100%;margin-top:6px;padding:14px;background:#F5EEDC;color:#000;border:0;border-radius:6px;font-family:var(--mono);font-weight:700;font-size:17px}
+  textarea{min-height:110px;resize:vertical}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+  .row.tight{margin-top:6px}
+  .pick{min-height:56px;background:#000;color:#F5EEDC;border:3px solid #F5EEDC;font-family:var(--mono);font-weight:700;font-size:17px;cursor:pointer}
+  .pick[aria-pressed="true"]{background:#F5EEDC;color:#000}
+  .row.need .pick{border-color:var(--red)}
+  .big{display:block;width:100%;margin-top:22px;background:var(--red);color:#F5EEDC;border:0;font-family:var(--display);font-size:30px;padding:18px;cursor:pointer}
+  .big[disabled]{opacity:.6}
+  p.line{font-size:16px;line-height:1.5;margin-top:14px}
+  .screen{display:none}.screen.on{display:block}
+</style>
+</head>
+<body>
+<main>
+<a class="home" href="/"><svg viewBox="0 0 400 130" preserveAspectRatio="none" aria-hidden="true"><path d="M86 26 C150 6, 260 2, 330 14 C390 26, 412 58, 392 86 C366 118, 270 128, 180 126 C90 124, 18 108, 8 74 C0 44, 50 18, 130 8 C190 1, 245 2, 276 6"/></svg>STUNTDATE</a>
+
+<section class="screen" id="s-creator"><h1>Have you paid your Stuntdate?</h1><div class="gigq" data-card></div>
+  <label>Paid with<select id="paidWith"><option>Venmo</option><option>Cash App</option><option>Zelle</option><option>PayPal</option><option>Revolut</option><option>Apple Pay</option><option>Cash</option><option>Other</option></select></label>
+  <div class="row"><button class="pick" id="cYes">YES</button><button class="pick" id="cNo">NO</button></div></section>
+
+<section class="screen" id="s-cno"><h1>Last step.</h1><p class="line">Tap YES once you've paid.</p></section>
+
+<section class="screen" id="s-wait-s"><h1>Thanks for paying and playing.</h1><p class="line">Waiting for the Stuntdate to confirm.</p></section>
+<section class="screen" id="s-wait-c"><h1>Thank you.</h1><p class="line">Waiting for the gig creator to confirm.</p></section>
+
+<section class="screen" id="s-stuntdate"><h1>Did you get paid, legend?</h1><div class="gigq" data-card></div>
+  <div class="row"><button class="pick" id="sYes">YES</button><button class="pick" id="sNo">NO</button></div></section>
+
+<section class="screen" id="s-notcool"><h1>Not cool.</h1><p class="line">What happened?</p><textarea id="what" maxlength="2000"></textarea><button class="big" id="whatSend">SEND</button></section>
+<section class="screen" id="s-got"><h1>Got it.</h1><p class="line">We'll look into it right away.</p></section>
+<section class="screen" id="s-problem-c"><h1>Thank you.</h1><p class="line">We'll be in touch.</p></section>
+
+<section class="screen" id="s-done"><h1>Gig completed.</h1><div class="gigq" data-card></div>
+  <label>How was it?</label><div class="row tight" id="rate"><button class="pick" data-v="good" aria-pressed="false">Good</button><button class="pick" data-v="not good" aria-pressed="false">Not good</button></div>
+  <label>Any thoughts on STUNTDATE? (optional)<textarea id="thoughts" maxlength="2000"></textarea></label><button class="big" id="fbSend">SEND</button></section>
+
+<section class="screen" id="s-thanks"><h1>Deal done.</h1><p class="line">Thank you.</p></section>
+
+<section class="screen" id="s-bad"><h1>Link not working.</h1></section>
+<p class="line" id="err" style="color:var(--red)" role="alert"></p>
+</main>
+<script>
+const SUPABASE_URL='https://uteudsgyzjbqqupprvbh.supabase.co';
+const SUPABASE_KEY='sb_publishable_67qWv22s-hW7gmldtJUCNg_Negs__jA';
+const H={'Content-Type':'application/json','apikey':SUPABASE_KEY};
+const $=id=>document.getElementById(id);
+const esc=t=>String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const token=new URLSearchParams(location.search).get('t')||'';
+let D=null;
+async function rpc(name,args){
+  const r=await fetch(SUPABASE_URL+'/rest/v1/rpc/'+name,{method:'POST',headers:H,body:JSON.stringify(args)});
+  if(!r.ok) throw new Error('rpc '+r.status);
+  return r.json();
+}
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');window.scrollTo(0,0)}
+function cards(d){
+  const tag=d.format==='ft'?'FaceTime':'In Real Life';
+  const where=d.city||(d.format==='ft'?'Anywhere':'');
+  document.querySelectorAll('[data-card]').forEach(c=>{
+    c.innerHTML='<span class="gt '+esc(d.format)+'">'+tag+'</span><p style="margin:8px 0">'+esc(d.gig)+'</p><span class="price">'+esc(d.price)+'</span>'+(where?' · '+esc(where):'');
+  });
+}
+function route(d){
+  D=d;
+  if(!d){show('s-bad');return}
+  cards(d);
+  if(d.status==='completed') return show(d.feedback_done?'s-thanks':'s-done');
+  if(d.status==='problem') return show(d.role==='stuntdate'?'s-got':'s-problem-c');
+  if(d.role==='creator') return show(d.creator_paid?'s-wait-s':'s-creator');
+  if(d.stuntdate_paid==='yes') return show('s-wait-c');
+  show('s-stuntdate');
+}
+function busy(btns,on){btns.forEach(b=>b.disabled=on)}
+async function guard(btns,fn){$('err').textContent='';busy(btns,true);try{await fn()}catch(e){$('err').textContent='Uh oh, something broke. Try again in a sec.'}finally{busy(btns,false)}}
+
+$('cYes').onclick=()=>guard([$('cYes'),$('cNo')],async()=>route(await rpc('deal_answer',{p_token:token,p_yes:true,p_paid_with:$('paidWith').value})));
+$('cNo').onclick=()=>show('s-cno');
+$('sYes').onclick=()=>guard([$('sYes'),$('sNo')],async()=>route(await rpc('deal_answer',{p_token:token,p_yes:true})));
+$('sNo').onclick=()=>guard([$('sYes'),$('sNo')],async()=>{await rpc('deal_answer',{p_token:token,p_yes:false});show('s-notcool')});
+$('whatSend').onclick=()=>guard([$('whatSend')],async()=>{await rpc('deal_problem',{p_token:token,p_note:$('what').value.trim()});show('s-got')});
+document.querySelectorAll('#rate .pick').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#rate .pick').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
+  $('rate').classList.remove('need');
+});
+$('fbSend').onclick=()=>{
+  const p=document.querySelector('#rate [aria-pressed="true"]');
+  if(!p){$('rate').classList.add('need');$('rate').scrollIntoView({block:'center'});return}
+  guard([$('fbSend')],async()=>{await rpc('deal_feedback',{p_token:token,p_rating:p.dataset.v,p_thoughts:$('thoughts').value.trim()});show('s-thanks')});
+};
+(async()=>{
+  if(!/^[0-9a-f-]{36}$/i.test(token)) return show('s-bad');
+  try{route(await rpc('deal_get',{p_token:token}))}catch(e){show('s-bad')}
+})();
+</script>
+</body>
+</html>
