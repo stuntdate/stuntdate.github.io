@@ -84,15 +84,15 @@ const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=nu
 const st={view:'home',tab:'waiting',filter:'all',page:{waiting:0,live:0,declined:0,signups:0,board:0},note:{},counts:{waiting:0,live:0,declined:0},msg:''};
 let TOKEN='';
 /* The Desktop shortcut passes a fresh session key after #t= ; keep it for this tab and clear it from the address bar. */
-if(location.hash.indexOf('#t=')===0){try{sessionStorage.setItem('sd_admin',location.hash.slice(3))}catch(e){}try{history.replaceState(null,'',location.pathname)}catch(e){}}
-try{TOKEN=sessionStorage.getItem('sd_admin')||''}catch(e){}
+if(location.hash.indexOf('#t=')===0){try{localStorage.setItem('sd_admin',location.hash.slice(3))}catch(e){}try{history.replaceState(null,'',location.pathname)}catch(e){}}
+try{TOKEN=localStorage.getItem('sd_admin')||''}catch(e){}
 
 async function rpc(name,body){
   const r=await fetch(SUPABASE_URL+'/rest/v1/rpc/'+name,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY},body:JSON.stringify(body)});
   if(!r.ok)throw new Error('http '+r.status);
   return r.json();
 }
-function setToken(t){TOKEN=t||'';try{if(t)sessionStorage.setItem('sd_admin',t);else sessionStorage.removeItem('sd_admin')}catch(e){}}
+function setToken(t){TOKEN=t||'';try{if(t)localStorage.setItem('sd_admin',t);else localStorage.removeItem('sd_admin')}catch(e){}}
 function expired(){setToken('');st.msg='Signed out. Log in again.';login()}
 
 function head(h,s){const f=document.createDocumentFragment();f.append(el('div','logo','STUNTDATE'),el('h1',null,h));if(s)f.append(el('p','sub',s));return f}
