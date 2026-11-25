@@ -107,6 +107,7 @@
   .chk input{width:22px;height:22px;accent-color:var(--red)}
   .send{background:var(--red);color:#F5EEDC;border:0;font-family:var(--display);font-size:26px;padding:16px;cursor:pointer;margin-top:4px}
   .fine{font-size:12px;line-height:1.5}
+  .deal{font-size:15px;line-height:1.45;text-align:center;margin-top:2px}
   .ok{text-align:center;padding:26px 0 6px}
   .ok h3{font-family:var(--display);font-weight:400;font-size:40px}
   .ok p{font-size:15px;line-height:1.55;margin-top:10px}
@@ -160,11 +161,12 @@
         <label>Anything they should know? (optional)<textarea id="tNote" maxlength="1000" placeholder="e.g. I play mahjong every Sunday with my grandma"></textarea></label>
         <label class="chk"><input type="checkbox" id="t18"> I'm 18 or older.</label>
         <p class="err" id="tErr"></p>
-        <button class="send" type="submit" id="tSend">SEND</button>
+        <p class="deal">Stuntdates show up. Gig creators send payment after gig completion.</p>
+        <button class="send" type="submit" id="tSend">SHAKE ON IT &amp; SEND</button>
         <p class="fine">Your contact is never shown on the board. If you get the gig, you'll both hear from us: <b>Gig's booked.</b></p>
       </form>
     </div>
-    <div class="ok" id="takeOk" hidden><h3>Got it.</h3><p>We'll reach out about this gig.<br>Want more? Do as many as you like.</p><button type="button" class="post" id="takeAnother" style="margin-top:18px;width:100%">PICK ANOTHER GIG +</button></div>
+    <div class="ok" id="takeOk" hidden><h3>Deal.</h3><p>We'll reach out about this gig.<br>Want more? Do as many as you like.</p><button type="button" class="post" id="takeAnother" style="margin-top:18px;width:100%">PICK ANOTHER GIG +</button></div>
   </div>
 </div>
 
@@ -183,11 +185,12 @@
         <label>Best way to reach you<input type="text" id="pContact" maxlength="120" placeholder="phone, @instagram or email"></label>
         <label class="chk"><input type="checkbox" id="p18"> I'm 18 or older and agree to the <a href="/terms" target="_blank">Terms</a>.</label>
         <p class="err" id="pErr"></p>
-        <button class="send" type="submit" id="pSend">POST IT</button>
+        <p class="deal">Stuntdates show up. Gig creators send payment after gig completion.</p>
+        <button class="send" type="submit" id="pSend">SHAKE ON IT &amp; SEND</button>
         <p class="fine">Your contact is never shown on the board. Tip for FaceTime gigs: send a FaceTime link instead of your number.</p>
       </form>
     </div>
-    <div class="ok" id="postOk" hidden><h3>Got it.</h3><p>Once it's approved, it goes on the board.</p><button type="button" class="post" id="postAnother" style="margin-top:18px;width:100%">POST ANOTHER GIG +</button></div>
+    <div class="ok" id="postOk" hidden><h3>Deal.</h3><p>Once it's approved, it goes on the board.</p><button type="button" class="post" id="postAnother" style="margin-top:18px;width:100%">POST ANOTHER GIG +</button></div>
   </div>
 </div>
 
@@ -338,7 +341,7 @@ $('takeForm').addEventListener('submit',async e=>{
     $('takeForm').closest('.formwrap').hidden=true; $('takeOk').hidden=false;
     $('tNote').value='';   // name, contact and the 18+ box stay filled so the next gig takes 5 seconds
   }catch(x){ console.error(x); err.textContent='Something broke. Try again in a sec.'; }
-  btn.disabled=false; btn.textContent='SEND';
+  btn.disabled=false; btn.textContent='SHAKE ON IT & SEND';
 });
 
 // POST A GIG → saved as "waiting"; J approves from the email
@@ -359,7 +362,7 @@ $('postForm').addEventListener('submit',async e=>{
     $('postForm').closest('.formwrap').hidden=true; $('postOk').hidden=false; $('postForm').reset();
     $('pFmt').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));
   }catch(x){ console.error(x); err.textContent='Something broke. Try again in a sec.'; }
-  btn.disabled=false; btn.textContent='POST IT';
+  btn.disabled=false; btn.textContent='SHAKE ON IT & SEND';
 });
 
 // REVIEW: opened from the approval email (stuntdate.com/gigs?review=<id>&t=<token>)
