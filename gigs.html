@@ -143,8 +143,6 @@
 
   <section class="board" id="board"></section>
 
-  <a href="#" class="done-link" id="openDone">Gig done? Tell us →</a>
-  <a href="#" class="done-link thoughts" id="openThoughts">Got thoughts? Tell us straight →</a>
   <footer>stuntdate.com · Humans only. AI don't apply.</footer>
 </main>
 
@@ -206,48 +204,6 @@
       <p class="err" id="rvErr"></p>
     </div>
     <div class="ok" id="rvOk" hidden><h3 id="rvOkH">Approved.</h3><p id="rvOkP">It's on the board now.</p></div>
-  </div>
-</div>
-
-<!-- Gig done -->
-<div class="sheet" id="doneSheet" hidden>
-  <div class="panel">
-    <button class="x" data-close aria-label="Close">✕</button>
-    <div class="formwrap">
-      <h2>Gig done.</h2>
-      <p class="lead">Takes 20 seconds. Helps everyone know who's good to gig with.</p>
-      <form data-ok="doneOk">
-        <label>Which gig?<input type="text" placeholder="e.g. Mahjong on FaceTime"></label>
-        <div><label>I was the…</label><div class="pick"><button type="button" aria-pressed="false">Poster</button><button type="button" aria-pressed="false">Stuntdate</button></div></div>
-        <div><label>Paid?</label><div class="pick"><button type="button" aria-pressed="false">Paid ✓</button><button type="button" aria-pressed="false">Not yet</button></div></div>
-        <label>Paid with<select><option>Venmo</option><option>Cash App</option><option>Zelle</option><option>PayPal</option><option>Revolut</option><option>Apple Pay</option><option>Cash</option><option>Other</option></select></label>
-        <div><label>How was it?</label><div class="pick"><button type="button" aria-pressed="false">👍</button><button type="button" aria-pressed="false">👎</button></div></div>
-        <div><label>Would you gig with them again?</label><div class="pick"><button type="button" aria-pressed="false">Yes</button><button type="button" aria-pressed="false">No</button></div></div>
-        <label>Anything else? (optional)<textarea placeholder=""></textarea></label>
-        <button class="send" type="submit">SEND</button>
-        <p class="fine">Payment screenshot: just email it to stuntdate@gmail.com. Safety problem? Email us right away.</p>
-      </form>
-    </div>
-    <div class="ok" id="doneOk" hidden><h3>Thank you.</h3><p>Humans helping humans. That's the whole thing.</p></div>
-  </div>
-</div>
-
-<!-- Thoughts -->
-<div class="sheet" id="thoughtsSheet" hidden>
-  <div class="panel">
-    <button class="x" data-close aria-label="Close">✕</button>
-    <div class="formwrap">
-      <h2>Tell us straight.</h2>
-      <p class="lead">You're in the trial, so you're shaping Stuntdate. Good, bad, weird: we want all of it.</p>
-      <form data-ok="thoughtsOk">
-        <label>What's working?<textarea></textarea></label>
-        <label>What's not?<textarea></textarea></label>
-        <label>I wish Stuntdate had…<textarea></textarea></label>
-        <label>Your name or contact (optional)<input type="text" placeholder="leave blank to stay anonymous"></label>
-        <button class="send" type="submit">SEND</button>
-      </form>
-    </div>
-    <div class="ok" id="thoughtsOk" hidden><h3>Got it.</h3><p>Thank you. Every note gets read.</p></div>
   </div>
 </div>
 
@@ -316,8 +272,6 @@ board.addEventListener('click',e=>{
 });
 $('openPost').onclick=()=>open('postSheet');
 $('postAnother').onclick=()=>open('postSheet');
-$('openDone').onclick=e=>{e.preventDefault();open('doneSheet');};
-$('openThoughts').onclick=e=>{e.preventDefault();open('thoughtsSheet');};
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeAll);
 document.querySelectorAll('.sheet').forEach(s=>s.addEventListener('click',e=>{if(e.target===s)closeAll();}));
 document.querySelectorAll('.pick').forEach(p=>p.querySelectorAll('button').forEach(b=>b.onclick=()=>p.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b))));
