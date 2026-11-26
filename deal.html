@@ -46,7 +46,6 @@
 <a class="home" href="/"><svg viewBox="0 0 400 130" preserveAspectRatio="none" aria-hidden="true"><path d="M86 26 C150 6, 260 2, 330 14 C390 26, 412 58, 392 86 C366 118, 270 128, 180 126 C90 124, 18 108, 8 74 C0 44, 50 18, 130 8 C190 1, 245 2, 276 6"/></svg>STUNTDATE</a>
 
 <section class="screen" id="s-creator"><h1>Have you paid your Stuntdate?</h1><div class="gigq" data-card></div>
-  <label>Paid with<select id="paidWith"><option>Venmo</option><option>Cash App</option><option>Zelle</option><option>PayPal</option><option>Revolut</option><option>Apple Pay</option><option>Cash</option><option>Other</option></select></label>
   <div class="row"><button class="pick" id="cYes">YES</button><button class="pick" id="cNo">NO</button></div></section>
 
 <section class="screen" id="s-cno"><h1>Last step.</h1><p class="line">Tap YES once you've paid.</p></section>
@@ -63,7 +62,7 @@
 
 <section class="screen" id="s-done"><h1>Gig completed.</h1><div class="gigq" data-card></div>
   <label>How was it?</label><div class="row tight" id="rate"><button class="pick" data-v="good" aria-pressed="false">Good</button><button class="pick" data-v="not good" aria-pressed="false">Not good</button></div>
-  <label>Any thoughts on STUNTDATE? (optional)<textarea id="thoughts" maxlength="2000"></textarea></label><label class="pick pic" style="display:flex;align-items:center;justify-content:center;margin-top:20px">ADD A PIC (OPTIONAL)<input type="file" accept="image/*" id="pic" style="display:none"></label><p class="line" style="margin:8px 0 0;font-size:15px">A screenshot of the payment, or a photo from the gig.</p><button class="big" id="fbSend">SEND</button></section>
+  <label>Any thoughts on STUNTDATE? (optional)<textarea id="thoughts" maxlength="2000"></textarea></label><label class="pick pic" style="display:flex;align-items:center;justify-content:center;margin-top:20px">ADD A PIC (OPTIONAL)<input type="file" accept="image/*" id="pic" style="display:none"></label><button class="big" id="fbSend">SEND</button></section>
 
 <section class="screen" id="s-thanks"><h1>Deal done.</h1><p class="line">Thank you.</p></section>
 
@@ -104,7 +103,7 @@ function route(d){
 function busy(btns,on){btns.forEach(b=>b.disabled=on)}
 async function guard(btns,fn){$('err').textContent='';busy(btns,true);try{await fn()}catch(e){$('err').textContent='Uh oh, something broke. Try again in a sec.'}finally{busy(btns,false)}}
 
-$('cYes').onclick=()=>guard([$('cYes'),$('cNo')],async()=>route(await rpc('deal_answer',{p_token:token,p_yes:true,p_paid_with:$('paidWith').value})));
+$('cYes').onclick=()=>guard([$('cYes'),$('cNo')],async()=>route(await rpc('deal_answer',{p_token:token,p_yes:true})));
 $('cNo').onclick=()=>show('s-cno');
 $('sYes').onclick=()=>guard([$('sYes'),$('sNo')],async()=>route(await rpc('deal_answer',{p_token:token,p_yes:true})));
 $('sNo').onclick=()=>guard([$('sYes'),$('sNo')],async()=>{await rpc('deal_answer',{p_token:token,p_yes:false});show('s-notcool')});
