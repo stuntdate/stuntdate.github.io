@@ -347,7 +347,7 @@ function postSignupGig(d){
     const h = { 'Content-Type':'application/json', 'apikey':SUPABASE_KEY, 'Prefer':'return=minimal' };
     if (SUPABASE_KEY.startsWith('eyJ')) h.Authorization = 'Bearer ' + SUPABASE_KEY;
     fetch(`${SUPABASE_URL}/rest/v1/gigs`, { method:'POST', keepalive:true, headers:h, body: JSON.stringify({
-      format: d.gig_format === 'irl' ? 'irl' : 'ft',
+      format: d.gig_format === 'both' ? 'both' : (d.gig_format === 'irl' ? 'irl' : 'ft'),
       gig, price: price.slice(0, 60), city: d.city ? d.city.slice(0, 80) : null, when_text: null,
       contact: d.email.slice(0, 120), is_18: true
     }) }).catch(()=>{});

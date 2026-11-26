@@ -150,7 +150,7 @@ function pager(key,total,off){
 }
 function gigCard(g,actions){
   const c=el('div','card');const t=el('div','cardtop');
-  t.append(el('span','tag '+g.format,g.format==='ft'?'FaceTime':'In Real Life'),el('span','where',g.city||''));
+  t.append(el('span','tag '+g.format,g.format==='ft'?'FaceTime':(g.format==='both'?'FaceTime or In Real Life':'In Real Life')),el('span','where',g.city||''));
   c.append(t,el('p','gig',g.gig),el('span','price',g.price),el('p','meta','When: '+(g.when_text||'Anytime')+'  ·  Created by: '+(g.contact||'')));
   if(actions){
     if(st.note[g.id]){c.append(el('div','done '+(st.note[g.id]==='APPROVED.'?'ok':''),st.note[g.id]))}
@@ -200,7 +200,7 @@ async function board(){
   [['all','All'],['ft','FaceTime'],['irl','In Real Life']].forEach(([k,l])=>{
     const b=el('button','tab',l);b.setAttribute('aria-pressed',st.filter===k);b.onclick=()=>{st.filter=k;st.page.board=0;render()};tabs.append(b)});
   app.append(tabs);
-  const list=d.rows.filter(g=>st.filter==='all'||g.format===st.filter);
+  const list=d.rows.filter(g=>st.filter==='all'||g.format===st.filter||g.format==='both');
   if(!list.length){app.append(el('div','empty','No gigs here.'))}
   else{const pages=Math.max(1,Math.ceil(list.length/PER));if(st.page.board>=pages)st.page.board=pages-1;const p=st.page.board;
     list.slice(p*PER,p*PER+PER).forEach(g=>app.append(gigCard(g,false)));app.append(pager('board',list.length))}

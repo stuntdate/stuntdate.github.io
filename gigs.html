@@ -59,7 +59,7 @@
   .tagrow{display:flex;justify-content:space-between;align-items:center;gap:8px}
   .gt{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 7px 2px}
   .gt.ft{background:var(--red);color:#F5EEDC;border:2px solid var(--red)}
-  .gt.irl{background:#000;color:#F5EEDC;border:2px solid #F5EEDC}
+  .gt.irl,.gt.both{background:#000;color:#F5EEDC;border:2px solid #F5EEDC}
   .city{font-size:12px;letter-spacing:1px;text-transform:uppercase}
   .q{font-size:16px;line-height:1.45;flex:1}
   .meta{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
@@ -224,7 +224,7 @@ const FN=SUPABASE_URL+'/functions/v1/gig-board';
 const H={'Content-Type':'application/json','apikey':SUPABASE_KEY};
 const $=id=>document.getElementById(id);
 const esc=t=>String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const tagName=f=>f==='ft'?'FaceTime':'In Real Life';
+const tagName=f=>f==='ft'?'FaceTime':(f==='both'?'FaceTime or In Real Life':'In Real Life');
 const PATH='M24 7 C140 1, 290 3, 391 9 C398 44, 397 92, 390 121 C280 128, 120 127, 9 122 C3 90, 5 44, 11 10 C70 3, 150 1, 214 6';
 const board=$('board'); let filter='all', GIGS=[], TAKING=null;
 
@@ -233,7 +233,7 @@ async function load(){
   render();
 }
 function render(){
-  const list=GIGS.map((g,i)=>[g,i]).filter(([g])=>filter==='all'||g.format===filter);
+  const list=GIGS.map((g,i)=>[g,i]).filter(([g])=>filter==='all'||g.format===filter||g.format==='both');
   board.innerHTML=list.length?list.map(([g,i])=>{
     const booked=g.status==='booked';
     const where=g.city||(g.format==='ft'?'Anywhere':'');
@@ -261,7 +261,7 @@ function logShare(g){
 }
 async function shareGig(g){
   logShare(g);
-  const where=g.format==='ft'?'FaceTime':('In Real Life'+(g.city?', '+g.city:''));
+  const where=g.format==='ft'?'FaceTime':((g.format==='both'?'FaceTime or In Real Life':'In Real Life')+(g.city?', '+g.city:''));
   const text=`"${g.gig}" ${g.price} (${where}) \u2014 this is so you. A real gig open right now on STUNTDATE (humans only). Join the beta:`;
   const url='https://stuntdate.com/?utm_source=share';
   try{ if(navigator.share){ await navigator.share({text,url}); return; } }catch(_){ return; }
@@ -282,7 +282,7 @@ $('openPost').onclick=()=>open('postSheet');
 $('postAnother').onclick=()=>open('postSheet');
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=closeAll);
 document.querySelectorAll('.sheet').forEach(s=>s.addEventListener('click',e=>{if(e.target===s)closeAll();}));
-document.querySelectorAll('.pick').forEach(p=>p.querySelectorAll('button').forEach(b=>b.onclick=()=>p.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b))));
+document.querySelectorAll('.pick').forEach(p=>p.querySelectorAll('button').forEach(b=>b.onclick=()=>{ if(p.id==='pFmt'){ b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true'); } else p.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); }));
 // forms not connected yet (I'll do it, Gig done, Thoughts): show their thank-you only
 document.querySelectorAll('.sheet form[data-ok]').forEach(f=>f.addEventListener('submit',e=>{e.preventDefault();f.closest('.formwrap').hidden=true;$(f.dataset.ok).hidden=false;}));
 
@@ -309,12 +309,12 @@ $('takeForm').addEventListener('submit',async e=>{
 // POST A GIG → saved as "waiting"; J approves from the email
 $('postForm').addEventListener('submit',async e=>{
   e.preventDefault(); const err=$('pErr'); err.textContent='';
-  const fb=$('pFmt').querySelector('[aria-pressed="true"]'); const format=fb&&fb.dataset.v;
+  const fOn=[...$('pFmt').querySelectorAll('[aria-pressed="true"]')].map(x=>x.dataset.v); const format=fOn.length===2?'both':(fOn[0]||'');
   const gig=$('pGig').value.trim(), price=$('pPrice').value.trim(), city=$('pCity').value.trim(), when_text=$('pWhen').value.trim(), contact=$('pContact').value.trim();
   if(!format) return err.textContent='FaceTime or In Real Life?';
   if(gig.length<3) return err.textContent='What\'s the gig?';
   if(!price) return err.textContent='Add a price.';
-  if(format==='irl'&&!city) return err.textContent='Which city?';
+  if((format==='irl'||format==='both')&&!city) return err.textContent='Which city?';
   if(contact.length<3) return err.textContent='How can we reach you?';
   if(!$('p18').checked) return err.textContent='The trial is 18+. Tick the box to confirm.';
   const btn=$('pSend'); btn.disabled=true; btn.textContent='CREATING…';
