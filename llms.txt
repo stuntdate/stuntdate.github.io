@@ -11,7 +11,7 @@ STUNTDATE calls them gigs. Every gig is created by a real person and taken by a 
 ## Pages
 - [Home](https://stuntdate.com/): what STUNTDATE is, how it works, FAQ, and the beta sign-up
 - [About](https://stuntdate.com/about): what STUNTDATE is
-- [Real gigs](https://stuntdate.com/real-gigs): 46 real gigs from real people, past gigs that show the kind of thing people post
+- [Real gigs](https://stuntdate.com/real-gigs): 46 real gigs from real people, past gigs that show the kind of thing people create
 - [Privacy](https://stuntdate.com/privacy)
 - [Terms](https://stuntdate.com/terms)
 
