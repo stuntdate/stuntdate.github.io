@@ -269,7 +269,7 @@
         <button type="button" class="fmt" id="fmtFacetime" aria-pressed="false" tabindex="-1">FaceTime</button>
         <button type="button" class="fmt" id="fmtIrl" aria-pressed="false" tabindex="-1">In Real Life</button>
       </div>
-      <label for="gigName">Name your gig</label>
+      <label for="gigName">Create your gig</label>
       <input type="text" id="gigName" maxlength="120" placeholder="e.g. teach me mahjong" autocomplete="off" tabindex="-1" style="margin-top:-4px">
       <label for="gigPrice">Your price</label>
       <div class="price-wrap" style="margin-top:-4px"><span>$</span><input type="text" id="gigPrice" inputmode="decimal" maxlength="7" placeholder="40" autocomplete="off" tabindex="-1"></div>
@@ -841,7 +841,7 @@ $('plusGig').addEventListener('click', () => {
   d.innerHTML = '<p class="xh"><span class="xn"></span><button type="button" class="xrm" aria-label="Remove this gig">✕</button></p>' +
     '<p class="sm" style="margin:0">FaceTime or In Real Life?</p>' +
     '<div class="fmts" role="group" aria-label="FaceTime or In Real Life"><button type="button" class="fmt xft" aria-pressed="false">FaceTime</button><button type="button" class="fmt xirl" aria-pressed="false">In Real Life</button></div>' +
-    '<label>Name your gig</label><input type="text" class="xname" maxlength="120" placeholder="e.g. teach me mahjong" autocomplete="off">' +
+    '<label>Create your gig</label><input type="text" class="xname" maxlength="120" placeholder="e.g. teach me mahjong" autocomplete="off">' +
     '<label>Your price</label><div class="price-wrap" style="margin-top:-4px"><span>$</span><input type="text" class="xprice" inputmode="decimal" maxlength="7" placeholder="40" autocomplete="off"></div>';
   moreGigs.appendChild(d); renumberGigs();
   d.querySelector('.xft').focus({preventScroll:true}); d.scrollIntoView({behavior:'smooth', block:'center'});
